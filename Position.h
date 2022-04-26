@@ -2,8 +2,8 @@
 // Created by dreadlopp on 2022-04-26.
 //
 
-#ifndef CUSTOMERLOCATIONALGORITHMAPP_POSITION_H
-#define CUSTOMERLOCATIONALGORITHMAPP_POSITION_H
+#ifndef CLA_POSITION_H
+#define CLA_POSITION_H
 
 
 #include <string>
@@ -26,4 +26,4 @@ public:
 };
 
 
-#endif //CUSTOMERLOCATIONALGORITHMAPP_POSITION_H
+#endif //CLA_POSITION_H

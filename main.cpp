@@ -2,6 +2,8 @@
 #include <iomanip>
 #include "Position.h"
 #include "FileParser.h"
+#include "Venue.h"
+#include "VenueRect.h"
 
 int main() {
 
@@ -47,6 +49,27 @@ int main() {
     for (auto e: positions) {
         std::cout << std::setprecision(15) << e.getTime() << "," << e.getProvider() << "," << e.getAccuracy() << "," << e.getLatitude() << "," << e.getLongitude() << std::endl;
     }
+     std::cout << std::endl;
+     */
+    /* ****************************************
+     * END TEST
+     ******************************************/
+
+    /* ****************************************
+     * TESTING VENUE
+     ******************************************/
+    /*
+    std::cout << "Testing Venue class!" << std::endl;
+    VenueRect venue;
+    venue.setName("testrummet");
+    venue.setMapMarker(12,12);
+    venue.setCornerA(-1, -50);
+    venue.setCornerB(-1, 12);
+    venue.setCornerC(1, 12);
+    venue.setCornerD(1, -50);
+
+    std::cout << std::setprecision(10) << "Circumference should be 14230800 and is: " << venue.getCircumference() << std::endl;
+
      */
     /* ****************************************
      * END TEST

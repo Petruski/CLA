@@ -2,8 +2,8 @@
 // Created by dreadlopp on 2022-04-26.
 //
 
-#ifndef CUSTOMERLOCATIONALGORITHMAPP_COORDINATE_H
-#define CUSTOMERLOCATIONALGORITHMAPP_COORDINATE_H
+#ifndef CLA_COORDINATE_H
+#define CLA_COORDINATE_H
 
 
 #include <numbers>
@@ -13,6 +13,7 @@ protected:
     double latitude;
     double longitude;
 public:
+    Coordinate(): latitude(0), longitude(0) {}
     Coordinate(double latitude, double longitude);
 
     [[nodiscard]] double getLatitude() const;
@@ -28,4 +29,4 @@ private:
 };
 
 
-#endif //CUSTOMERLOCATIONALGORITHMAPP_COORDINATE_H
+#endif //CLA_COORDINATE_H

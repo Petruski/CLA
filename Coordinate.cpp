@@ -39,6 +39,5 @@ double Coordinate::getDistanceTo(Coordinate coordinate) {
     // d = distance in meters
     // d = 2 * r * arcsin(√(    sin²((φ2-φ1)/2) + cos(φ1) * cos(φ2) * sin²((λ2-λ1)/2)  ))
 
-
     return 2 * RADIUS * std::asin(sqrt(std::pow(std::sin((lat2-lat1)/2), 2.0) + std::cos(lat1) * std::cos(lat2) * pow(std::sin((lon2-lon1)/2), 2.0)));
 }
