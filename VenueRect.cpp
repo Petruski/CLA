@@ -27,3 +27,33 @@ void VenueRect::setCornerD(double latitude, double longitude) {
 double VenueRect::getCircumference() {
     return cornerA.getDistanceTo(cornerB) + cornerB.getDistanceTo(cornerC) + cornerC.getDistanceTo(cornerD) + cornerD.getDistanceTo(cornerA);
 }
+
+bool VenueRect::isInside(Position position) {
+
+    // the position is considered to be a circle where the radius
+    // is the error margin
+    double circleX = position.getLatitude();
+    double circleY = position.getLongitude();
+    double radius = position.getAccuracy();
+
+    // the venue is a rectangel, it's midpoint is x,y
+
+    return false;
+}
+
+bool VenueRect::isInsideRect(double x, double y) {
+
+    // move rectangle to be parallel with x-axis
+    double moveY = cornerA.getLongitude() - cornerB.getLongitude();
+    double moveX = cornerA.getDistanceTo(cornerB) - cornerA.getDistanceTo(cornerA.getLatitude(), cornerB.getLongitude());
+
+    double rectTopLeftX = cornerA.getLatitude();
+    double rectTopLeftY = cornerA.getLongitude();
+    double rectBottomRightX = cornerC.getLatitude() + moveX;
+    double rectBottomRightY = cornerC.getLongitude() + moveY;
+    x += moveX;
+    y += moveY;
+
+
+    return false;
+}

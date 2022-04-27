@@ -41,3 +41,23 @@ double Coordinate::getDistanceTo(Coordinate coordinate) {
 
     return 2 * RADIUS * std::asin(sqrt(std::pow(std::sin((lat2-lat1)/2), 2.0) + std::cos(lat1) * std::cos(lat2) * pow(std::sin((lon2-lon1)/2), 2.0)));
 }
+
+double Coordinate::getDistanceTo(double lat, double lon) {
+    Coordinate c(lat, lon);
+    return getDistanceTo(c);
+}
+
+double Coordinate::getEucDistanceTo(Coordinate coordinate) const {
+
+    double x1 = latitude;
+    double y1 = longitude;
+    double x2 = coordinate.getLatitude();
+    double y2 = coordinate.getLongitude();
+
+    return sqrt(std::abs(pow((x2-x1),2) + pow((y2-y1),2)));
+}
+
+double Coordinate::getEucDistanceTo(double lat, double lon) const {
+    Coordinate c(lat, lon);
+    return getEucDistanceTo(c);
+}

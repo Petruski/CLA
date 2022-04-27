@@ -21,7 +21,13 @@ public:
     [[nodiscard]] double getLongitude() const;
     void setLongitude(double aLongitude);
 
+    // real earth distance with approximated earth radius
     double getDistanceTo(Coordinate coordinate);
+    double getDistanceTo(double lat, double lon);
+
+    // euclidian distance
+    double getEucDistanceTo(Coordinate coordinate) const;
+    double getEucDistanceTo(double lat, double lon) const;
 
 private:
     double toRadian(double degrees) { return degrees * std::numbers::pi / 180 ; }

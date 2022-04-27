@@ -12,6 +12,9 @@ class VenueRect: public Venue {
 private:
     Coordinate cornerA, cornerB, cornerC, cornerD;
 
+    // private functions
+    bool isInsideRect(double x, double y);
+
 public:
     VenueRect() {}
 
@@ -21,7 +24,7 @@ public:
     void setCornerD(double latitude, double longitude);
 
     double getCircumference() override;
-    bool isInside(Position position) override { return true; }
+    bool isInside(Position position) override;
 };
 
 
