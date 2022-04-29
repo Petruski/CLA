@@ -29,3 +29,18 @@ const std::string &Position::getProvider() const {
 void Position::setProvider(const std::string &provider) {
     Position::provider = provider;
 }
+
+bool Position::isInside(Coordinate p) {
+
+    if (getEucDistanceTo(p) > accuracy)
+        return false;
+
+    return true;
+}
+
+bool Position::isInside(double latitude, double longitude) {
+
+    Coordinate p(latitude, longitude);
+    return isInside(p);
+}
+
