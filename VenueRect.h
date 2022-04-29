@@ -10,10 +10,9 @@
 
 class VenueRect: public Venue {
 private:
+    const int NO_OF_RANDOM_MC_VARIABLES = 10000; // no of monte carlo variables
+    const double IS_INSIDE_LIMIT = 0.50; // >= 1 means whole position with error margin must be inside, <= 0 means always outside
     Coordinate cornerA, cornerB, cornerC, cornerD;
-
-    // private functions
-    bool isInsideRect(double x, double y);
 
 public:
     VenueRect() {}
@@ -24,7 +23,16 @@ public:
     void setCornerD(double latitude, double longitude);
 
     double getCircumference() override;
+
+    // check if position is inside using monte carlo method
     bool isInside(Position position) override;
+
+    // check if exact coordinate is inside venue
+    // being on the border counts as inside
+    bool isInside(double latitude, double longitude);
+
+public:
+    double areaTriangle(Coordinate ca, Coordinate cb, Coordinate cc);
 };
 
 

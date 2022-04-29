@@ -60,20 +60,50 @@ int main() {
      ******************************************/
     /*
     std::cout << "Testing Venue class!" << std::endl;
-    VenueRect venue;
-    venue.setName("testrummet");
-    venue.setMapMarker(12,12);
-    venue.setCornerA(-1, -50);
-    venue.setCornerB(-1, 12);
-    venue.setCornerC(1, 12);
-    venue.setCornerD(1, -50);
+    VenueRect venue3;
+    venue3.setName("testrummet");
+    venue3.setMapMarker(12,12);
+    venue3.setCornerA(-1, -50);
+    venue3.setCornerB(-1, 12);
+    venue3.setCornerC(1, 12);
+    venue3.setCornerD(1, -50);
 
-    std::cout << std::setprecision(10) << "Circumference should be 14230800 and is: " << venue.getCircumference() << std::endl;
+    std::cout << std::setprecision(10) << "Circumference should be 14230800 and is: " << venue3.getCircumference() << std::endl;
 
      */
     /* ****************************************
      * END TEST
      ******************************************/
+
+    /* ****************************************
+    * TESTING IS INSIDE FUNTIONS
+    ******************************************/
+    /*
+    std::cout << "Testing isInside functions!" << std::endl;
+
+    for (int i = 0; i < 40; i++) {
+
+
+    VenueRect venue3;
+    venue3.setName("testrummet");
+    venue3.setMapMarker(0,10);
+    venue3.setCornerA(0, 10);
+    venue3.setCornerB(10, 10);
+    venue3.setCornerC(10, 0);
+    venue3.setCornerD(0, 0);
+
+    Position p1(-1, 5, 1, 1234, "GPS");
+    if (venue3.isInside(p1))
+        std::cout << "Position is inside" << std::endl;
+    else
+        std::cout << "Position is OUTSIDE" << std::endl;
+
+    }
+    */
+    /* ****************************************
+     * END TEST
+     ******************************************/
+
 
 
 
