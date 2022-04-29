@@ -6,7 +6,7 @@
 #include <cmath>
 #include <random>
 #include <iomanip>
-#include "VenueRect.h"
+#include "../include/VenueRect.h"
 
 void VenueRect::setCornerA(double latitude, double longitude) {
     cornerA.setLatitude(latitude);

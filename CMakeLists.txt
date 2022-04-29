@@ -3,4 +3,19 @@ project(CLA)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(CustomerLocationAlgorithmApp main.cpp FileParser.cpp FileParser.h Coordinate.cpp Coordinate.h Position.cpp Position.h Venue.cpp Venue.h VenueRect.cpp VenueRect.h)
+include_directories(.)
+include_directories(src)
+include_directories(include)
+
+add_executable(CustomerLocationAlgorithmApp
+        main.cpp
+        src/FileParser.cpp
+        include/FileParser.h
+        src/Coordinate.cpp
+        include/Coordinate.h
+        src/Position.cpp
+        include/Position.h
+        src/Venue.cpp
+        include/Venue.h
+        src/VenueRect.cpp
+        include/VenueRect.h)

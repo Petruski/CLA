@@ -3,7 +3,7 @@
 //
 
 #include <cmath>
-#include "Coordinate.h"
+#include "../include/Coordinate.h"
 
 Coordinate::Coordinate(double latitude, double longitude) : latitude(latitude), longitude(longitude) {}
 
