@@ -1,9 +1,9 @@
 #include <iostream>
 #include <iomanip>
-#include "Position.h"
-#include "FileParser.h"
-#include "Venue.h"
-#include "VenueRect.h"
+#include "include/Position.h"
+#include "include/FileParser.h"
+#include "include/Venue.h"
+#include "include/VenueRect.h"
 
 int main() {
 

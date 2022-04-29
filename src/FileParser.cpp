@@ -4,7 +4,7 @@
 
 #include <sstream>
 #include <iostream>
-#include "FileParser.h"
+#include "../include/FileParser.h"
 
 std::vector<Position> FileParser::getPositions() {
 

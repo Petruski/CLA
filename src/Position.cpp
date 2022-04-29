@@ -2,7 +2,7 @@
 // Created by dreadlopp on 2022-04-26.
 //
 
-#include "Position.h"
+#include "../include/Position.h"
 
 Position::Position(double latitude, double longitude, double accuracy, long time, std::string provider) : Coordinate(latitude, longitude), accuracy(accuracy), time(time), provider(provider) {}
 
