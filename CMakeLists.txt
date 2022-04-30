@@ -18,4 +18,5 @@ add_executable(CustomerLocationAlgorithmApp
         src/Venue.cpp
         include/Venue.h
         src/VenueRect.cpp
-        include/VenueRect.h)
+        include/VenueRect.h
+        include/DataStreamIterator.hpp)
