@@ -4,6 +4,8 @@
 #include "include/FileParser.h"
 #include "include/Venue.h"
 #include "include/VenueRect.h"
+#include "DataStreamIterator.hpp"
+#include "PositionParser.h"
 
 int main() {
 
@@ -104,8 +106,32 @@ int main() {
      * END TEST
      ******************************************/
 
-
-
+//    Position one(10, 25, 12, 10000, "First");
+//    Position two(122, 25, 24, 10000, "Second");
+//    Position three(12, 25, 24, 40000, "Third");
+//    Position four(15, 25, 12, 210000, "Fourth");
+//    std::vector<Position> cords;
+//    cords.push_back(one);
+//    cords.push_back(two);
+//    cords.push_back(three);
+//    cords.push_back(four);
+//    DataStreamIterator<Position> cordStream(cords);
+//    Position test = PositionParser::average(cordStream, 2);
+//    std::cout << "Latitude: " << test.getLatitude() << std::endl;
+//    std::cout << "Longitude: " << test.getLongitude() << std::endl;
+//    std::cout << "Accuracy: " << test.getAccuracy() << std::endl;
+//    std::cout << "Time: " << test.getTime() << std::endl;
+//    std::cout << "Provider: " << test.getProvider() << std::endl;
+//    test = PositionParser::average(cordStream, 2);
+//    std::cout << "Latitude: " << test.getLatitude() << std::endl;
+//    std::cout << "Longitude: " << test.getLongitude() << std::endl;
+//    std::cout << "Accuracy: " << test.getAccuracy() << std::endl;
+//    std::cout << "Time: " << test.getTime() << std::endl;
+//    std::cout << "Provider: " << test.getProvider() << std::endl;
+//    PositionParser::filter(cordStream, 12);
+//    for (const Position& pos : cords) {
+//        std::cout << pos.getProvider() << std::endl;
+//    }
 
     return 0;
 }

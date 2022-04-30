@@ -5,13 +5,12 @@
 #ifndef CLA_DATASTREAMITERATOR_HPP
 #define CLA_DATASTREAMITERATOR_HPP
 
-#include <utility>
 #include <vector>
 
 template<typename T>
 class DataStreamIterator {
 public:
-    explicit DataStreamIterator(std::vector<T> container) : m_container(std::move(container)) {
+    explicit DataStreamIterator(std::vector<T> &container) : m_container(container) {
         m_iterator = m_container.begin();
     }
     bool hasNext() {
@@ -22,8 +21,12 @@ public:
         m_iterator++;
         return temp;
     };
+
+    void remove() {
+        m_iterator = m_container.erase(--m_iterator);
+    }
 private:
-    std::vector<T> m_container;
+    std::vector<T> &m_container;
     typename std::vector<T>::iterator m_iterator;
 };
 
