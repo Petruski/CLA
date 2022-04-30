@@ -21,4 +21,4 @@ add_executable(CustomerLocationAlgorithmApp
         include/VenueRect.h
         include/DataStreamIterator.hpp
         src/PositionParser.cpp
-        include/PositionParser.h)
+        include/PositionParser.h include/Statistics.cpp src/Statistics.h)
