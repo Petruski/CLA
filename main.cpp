@@ -51,15 +51,15 @@ int main() {
     /* ****************************************
      * TESTING FILE PARSER
      ******************************************/
-    std::cout << "Testing FileParser class!" << std::endl;
-    FileParser fileParser;
-    //fileParser.setFile("positions.txt");
-    std::vector<Position> positions = fileParser.getPositions();
-
-    for (auto e: positions) {
-        std::cout << std::setprecision(15) << e.getTime() << "," << e.getProvider() << "," << e.getAccuracy() << "," << e.getLatitude() << "," << e.getLongitude() << std::endl;
-    }
-     std::cout << std::endl;
+//    std::cout << "Testing FileParser class!" << std::endl;
+//    FileParser fileParser;
+//    //fileParser.setFile("positions.txt");
+//    std::vector<Position> positions = fileParser.getPositions();
+//
+//    for (auto e: positions) {
+//        std::cout << std::setprecision(15) << e.getTime() << "," << e.getProvider() << "," << e.getAccuracy() << "," << e.getLatitude() << "," << e.getLongitude() << std::endl;
+//    }
+//     std::cout << std::endl;
     /* ****************************************
      * END TEST
      ******************************************/
