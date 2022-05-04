@@ -1,11 +1,13 @@
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 #include "include/Position.h"
 #include "include/FileParser.h"
 #include "include/Venue.h"
 #include "include/VenueRect.h"
 #include "DataStreamIterator.hpp"
 #include "PositionParser.h"
+#include "Statistics.h"
 
 int main() {
 
@@ -132,6 +134,6 @@ int main() {
 //    for (const Position& pos : cords) {
 //        std::cout << pos.getProvider() << std::endl;
 //    }
-
+//  std::cout << Statistics::multiBayesian(0.99, 0.97, Statistics::getLowPrior(), 0, 2) << std::endl;
     return 0;
 }
