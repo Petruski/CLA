@@ -4,6 +4,7 @@
 
 #include "Statistics.h"
 #include <cmath>
+#include <vector>
 
 double Statistics::multiBayesian(double specificity, double sensitivity, double prior, int negativeResults,
                                  int positiveResults) {
@@ -18,4 +19,14 @@ double Statistics::multiBayesian(double specificity, double sensitivity, double 
 
 double Statistics::singleBayesian(double specificity, double sensitivity, double prior) {
     return multiBayesian(specificity, sensitivity, prior, 0, 1);
+}
+
+double Statistics::calcSpecificity(const VenueRect& venueRect, int margin) {
+    std::vector<Coordinate> corners = venueRect.getCorners();
+
+    return 0;
+}
+
+double Statistics::calcSensitivity(const VenueRect& venueRect, int margin) {
+    return 0;
 }
