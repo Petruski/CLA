@@ -8,6 +8,7 @@
 #include "Vertex.h"
 #include <cmath>
 #include <vector>
+#include <cfloat>
 
 double Statistics::multiBayesian(double specificity, double sensitivity, double prior, int negativeResults,
                                  int positiveResults) {
@@ -24,26 +25,48 @@ double Statistics::singleBayesian(double specificity, double sensitivity, double
     return multiBayesian(specificity, sensitivity, prior, 0, 1);
 }
 
+// TODO - Check that the math checks out for some real coordinates
 double Statistics::calcSpecificity(const VenueRect& venueRect, int margin) {
     std::vector<Coordinate> corners = venueRect.getCorners();
     DataStreamIterator<Coordinate> cornerIt (corners);
     // Order the corners SW, NW, NE, SE
     corners = PositionParser::order(cornerIt);
-    // Determine the distances between each corner
+    // Determine the distances between the SW corner and the other corners
     double SW_NW = corners[0].getDistanceTo(corners[1]);
-    double NW_NE = corners[1].getDistanceTo(corners[2]);
-    double NE_SE = corners[2].getDistanceTo(corners[3]);
-    double SE_SW = corners[3].getDistanceTo(corners[0]);
-    // Create four edges with the above distances. SW point represents the origin
+    double SW_NE = corners[0].getDistanceTo(corners[2]);
+    double SW_SE = corners[0].getDistanceTo(corners[3]);
+    // Determine the bearings between the origin (SW) and each other position
+    double SW_NW_BEARING = corners[0].getBearingTo((corners[1]));
+    double SW_NE_BEARING = corners[0].getBearingTo(corners[2]);
+    double SW_SE_BEARING = corners[0].getBearingTo(corners[3]);
+    // Create four edges with the above distances and bearings (angles). SW point represents the origin
     Point sw_point(0, 0);
-    Point nw_point(std::sqrt((std::pow(NW_NE, 2)) + std::pow(NE_SE, 2)), SW_NW);
-    Point ne_point(NW_NE, std::sqrt((std::pow(SW_NW, 2) + std::pow(NW_NE, 2))));
-    Point se_point(SE_SW, 0);
+    Point nw_point(std::cos(SW_NW_BEARING) * SW_NW, std::sin(SW_NW_BEARING) * SW_NW);
+    Point ne_point(std::cos(SW_NE_BEARING) * SW_NE, std::sin(SW_NE_BEARING) * SW_NE);
+    Point se_point(std::cos(SW_SE_BEARING) * SW_SE, std::sin(SW_SE_BEARING) * SW_SE);
     // Create four vertices between each edge
     Vertex SW_NW_VERTEX(sw_point, nw_point);
     Vertex NW_NE_VERTEX(nw_point, ne_point);
     Vertex NE_SE_VERTEX(ne_point, se_point);
     Vertex SE_SW_VERTEX(se_point, sw_point);
+    // Calculate lower and upper X/Y bounds
+    double lower_x_bound, lower_y_bound = DBL_MAX;
+    double upper_x_bound, upper_y_bound = -DBL_MAX;
+    std::vector<Point> points{nw_point, ne_point, se_point};
+    for (Point p : points) {
+        if (lower_x_bound > p.getX()) {
+            lower_x_bound = p.getX();
+        }
+        if (lower_y_bound > p.getY()) {
+            lower_y_bound = p.getY();
+        }
+        if (upper_x_bound < p.getX()) {
+            upper_x_bound = p.getX();
+        }
+        if (upper_y_bound < p.getY()) {
+            upper_y_bound = p.getY();
+        }
+    }
     return 0;
 }
 

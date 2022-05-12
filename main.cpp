@@ -137,12 +137,13 @@ int main() {
 //  std::cout << Statistics::multiBayesian(0.99, 0.97, Statistics::getLowPrior(), 0, 2) << std::endl;
 
     // Test for realistic venue
-//    VenueRect venueRect;
-//    venueRect.setCornerA(64.75002841754927, 20.96734211992527);
-//    venueRect.setCornerB(64.75014769443297, 20.96727707635631);
-//    venueRect.setCornerC(64.75013596699291, 20.967162411920313);
-//    venueRect.setCornerD(64.75001697609392, 20.967226114384754);
-//    std::cout.precision(14);
+    VenueRect venueRect;
+    venueRect.setCornerA(64.75002841754927, 20.96734211992527);
+    venueRect.setCornerB(64.75014769443297, 20.96727707635631);
+    venueRect.setCornerC(64.75013596699291, 20.967162411920313);
+    venueRect.setCornerD(64.75001697609392, 20.967226114384754);
+    std::cout.precision(14);
+    Statistics::calcSpecificity(venueRect, 12);
 //    double SE = 64.75002841754927;
 //    double SW = 64.75001697609392;
 //    double NW = 64.75013596699291;

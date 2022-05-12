@@ -25,6 +25,9 @@ public:
     double getDistanceTo(Coordinate coordinate);
     double getDistanceTo(double lat, double lon);
 
+    // Get bearing (angle) between two coordinates
+    double getBearingTo(Coordinate coordinate);
+
     // euclidian distance
     double getEucDistanceTo(Coordinate coordinate) const;
     double getEucDistanceTo(double lat, double lon) const;
