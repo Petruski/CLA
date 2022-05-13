@@ -12,29 +12,38 @@ int main() {
     /* ****************************************
      * TESTING COORDINATES/POSITION CLASS
      ******************************************/
-    /*
-    std::cout << "Testing Coordinate/Position class!" << std::endl;
-    Position pos1(59.33258,18.0649,100,12, "GPS");
-    Position pos2(57.70716,11.96679,100,12, "GPS");
-    std::cout << "Distance should be 397400 and is: " << std::setprecision(10) << pos1.getDistanceTo(pos2) << std::endl;
-    std::cout << "Distance should be 397400 and is: " << std::setprecision(10) << pos2.getDistanceTo(pos1) << std::endl;
-
-    pos1.setLatitude(-26.4390917);
-    pos1.setLongitude(133.281323);
-    pos2.setLatitude(56.0);
-    pos2.setLongitude(-96.0);
-    std::cout << "Distance should be 14910000 and is: " << std::setprecision(10) << pos1.getDistanceTo(pos2) << std::endl;
-    std::cout << "Distance should be 14910000 and is: " << std::setprecision(10) << pos2.getDistanceTo(pos1) << std::endl;
-
-    pos1.setLatitude(-26.4390917);
-    pos1.setLongitude(133.281323);
-    pos2.setLatitude(56.0);
-    pos2.setLongitude(-96.0);
-    std::cout << "Distance should be 14910000 and is: " << std::setprecision(10) << pos1.getDistanceTo(pos2) << std::endl;
-    std::cout << "Distance should be 14910000 and is: " << std::setprecision(10) << pos2.getDistanceTo(pos1) << std::endl;
-
-    std::cout << std::endl;
-    */
+//    std::cout << "Testing Coordinate/Position class!" << std::endl;
+//    Position pos1(100,12, "GPS");
+//    pos1.setLatitude(59.33258);
+//    pos1.setLongitude(18.0649);
+//    Position pos2(100,12, "GPS");
+//    pos2.setLatitude(57.70716);
+//    pos2.setLongitude(11.96679);
+//    std::cout << "Distance should be 397400 and is: " << std::setprecision(10) << pos1.getDistanceTo(pos2) << std::endl;
+//    std::cout << "Euc Distance should be 6.3110170138021 and is: " << std::setprecision(10) << pos2.getEucDistanceTo(pos1) << std::endl;
+//
+//    pos1.setLatitude(-26.4390917);
+//    pos1.setLongitude(133.281323);
+//    pos2.setLatitude(56.0);
+//    pos2.setLongitude(-96.0);
+//    std::cout << "Distance should be 14910000 and is: " << std::setprecision(10) << pos1.getDistanceTo(pos2) << std::endl;
+//    std::cout << "Euc Distance should be 154.54312135113 and is: " << std::setprecision(10) << pos2.getEucDistanceTo(pos1) << std::endl;
+//
+//    pos1.setLatitude(-90);
+//    pos1.setLongitude(-180);
+//    pos2.setLatitude(-90);
+//    pos2.setLongitude(180);
+//    std::cout << "Distance should be 0 and is: " << std::setprecision(10) << pos1.getDistanceTo(pos2) << std::endl;
+//    std::cout << "Euc Distance should be 0 and is: " << std::setprecision(10) << pos2.getEucDistanceTo(pos1) << std::endl;
+//
+//    pos1.setLatitude(-90);
+//    pos1.setLongitude(-179);
+//    pos2.setLatitude(90);
+//    pos2.setLongitude(179);
+//    std::cout << "Distance should be 20020000 and is: " << std::setprecision(10) << pos1.getDistanceTo(pos2) << std::endl;
+//    std::cout << "Euc Distance should be 180.0111107682 and is: " << std::setprecision(10) << pos2.getEucDistanceTo(pos1) << std::endl;
+//
+//    std::cout << std::endl;
     /* ****************************************
      * END TEST
      ******************************************/
@@ -42,17 +51,15 @@ int main() {
     /* ****************************************
      * TESTING FILE PARSER
      ******************************************/
-    /*
-    std::cout << "Testing FileParser class!" << std::endl;
-    FileParser fileParser;
-    //fileParser.setFile("positions.txt");
-    std::vector<Position> positions = fileParser.getPositions();
-
-    for (auto e: positions) {
-        std::cout << std::setprecision(15) << e.getTime() << "," << e.getProvider() << "," << e.getAccuracy() << "," << e.getLatitude() << "," << e.getLongitude() << std::endl;
-    }
-     std::cout << std::endl;
-     */
+//    std::cout << "Testing FileParser class!" << std::endl;
+//    FileParser fileParser;
+//    //fileParser.setFile("positions.txt");
+//    std::vector<Position> positions = fileParser.getPositions();
+//
+//    for (auto e: positions) {
+//        std::cout << std::setprecision(15) << e.getTime() << "," << e.getProvider() << "," << e.getAccuracy() << "," << e.getLatitude() << "," << e.getLongitude() << std::endl;
+//    }
+//     std::cout << std::endl;
     /* ****************************************
      * END TEST
      ******************************************/
@@ -60,48 +67,37 @@ int main() {
     /* ****************************************
      * TESTING VENUE
      ******************************************/
-    /*
-    std::cout << "Testing Venue class!" << std::endl;
-    VenueRect venue3;
-    venue3.setName("testrummet");
-    venue3.setMapMarker(12,12);
-    venue3.setCornerA(-1, -50);
-    venue3.setCornerB(-1, 12);
-    venue3.setCornerC(1, 12);
-    venue3.setCornerD(1, -50);
+//    std::cout << "Testing Venue class!" << std::endl;
+//    VenueRect venue1;
+//    venue1.setName("test venue");
+//    venue1.setMapMarker(12,12);
+//    venue1.setCornerA(-1, -50);
+//    venue1.setCornerB(-1, 12);
+//    venue1.setCornerC(1, 12);
+//    venue1.setCornerD(1, -50);
+//
+//    std::cout << std::setprecision(10) << "Circumference should be 14230800 and is: " << venue1.getCircumference() << std::endl;
+//
+//    std::cout << "Testing isInside functions!" << std::endl;
+//
+//    for (int i = 0; i < 20; i++) {
+//
+//    venue1.setMapMarker(0, 10);
+//    venue1.setCornerA(1, 0);
+//    venue1.setCornerB(1, 1);
+//    venue1.setCornerC(0, 1);
+//    venue1.setCornerD(0, 0);
+//
+//    Position p1(0.1, 1234, "GPS");
+//    p1.setLatitude(1);
+//    p1.setLongitude(0.5);
+//    if (venue1.isInside(p1))
+//        std::cout << "Position is inside" << std::endl;
+//    else
+//        std::cout << "Position is OUTSIDE" << std::endl;
+//
+//    }
 
-    std::cout << std::setprecision(10) << "Circumference should be 14230800 and is: " << venue3.getCircumference() << std::endl;
-
-     */
-    /* ****************************************
-     * END TEST
-     ******************************************/
-
-    /* ****************************************
-    * TESTING IS INSIDE FUNTIONS
-    ******************************************/
-    /*
-    std::cout << "Testing isInside functions!" << std::endl;
-
-    for (int i = 0; i < 40; i++) {
-
-
-    VenueRect venue3;
-    venue3.setName("testrummet");
-    venue3.setMapMarker(0,10);
-    venue3.setCornerA(0, 10);
-    venue3.setCornerB(10, 10);
-    venue3.setCornerC(10, 0);
-    venue3.setCornerD(0, 0);
-
-    Position p1(-1, 5, 1, 1234, "GPS");
-    if (venue3.isInside(p1))
-        std::cout << "Position is inside" << std::endl;
-    else
-        std::cout << "Position is OUTSIDE" << std::endl;
-
-    }
-    */
     /* ****************************************
      * END TEST
      ******************************************/
