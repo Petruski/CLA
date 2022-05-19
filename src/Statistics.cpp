@@ -6,6 +6,7 @@
 #include "PositionParser.h"
 #include "Point.h"
 #include "Vertex.h"
+#include "Triangle.h"
 #include <cmath>
 #include <vector>
 #include <cfloat>
@@ -25,7 +26,6 @@ double Statistics::singleBayesian(double specificity, double sensitivity, double
     return multiBayesian(specificity, sensitivity, prior, 0, 1);
 }
 
-// TODO - Check that the math checks out for some real coordinates
 double Statistics::calcSpecificity(const VenueRect& venueRect, int margin) {
     std::vector<Coordinate> corners = venueRect.getCorners();
     DataStreamIterator<Coordinate> cornerIt (corners);
@@ -44,29 +44,13 @@ double Statistics::calcSpecificity(const VenueRect& venueRect, int margin) {
     Point nw_point(std::cos(SW_NW_BEARING) * SW_NW, std::sin(SW_NW_BEARING) * SW_NW);
     Point ne_point(std::cos(SW_NE_BEARING) * SW_NE, std::sin(SW_NE_BEARING) * SW_NE);
     Point se_point(std::cos(SW_SE_BEARING) * SW_SE, std::sin(SW_SE_BEARING) * SW_SE);
-    // Create four vertices between each edge
-    Vertex SW_NW_VERTEX(sw_point, nw_point);
-    Vertex NW_NE_VERTEX(nw_point, ne_point);
-    Vertex NE_SE_VERTEX(ne_point, se_point);
-    Vertex SE_SW_VERTEX(se_point, sw_point);
-    // Calculate lower and upper X/Y bounds
-    double lower_x_bound, lower_y_bound = DBL_MAX;
-    double upper_x_bound, upper_y_bound = -DBL_MAX;
-    std::vector<Point> points{nw_point, ne_point, se_point};
-    for (Point p : points) {
-        if (lower_x_bound > p.getX()) {
-            lower_x_bound = p.getX();
-        }
-        if (lower_y_bound > p.getY()) {
-            lower_y_bound = p.getY();
-        }
-        if (upper_x_bound < p.getX()) {
-            upper_x_bound = p.getX();
-        }
-        if (upper_y_bound < p.getY()) {
-            upper_y_bound = p.getY();
-        }
-    }
+    // Decompose the polygon (assumed rectangle) into two triangles along a diagonal
+    Triangle leftTriangle(sw_point, nw_point, se_point);
+    Triangle rightTriangle(ne_point, nw_point, se_point);
+    double leftTriangleArea = leftTriangle.area();
+    double rightTriangleArea = rightTriangle.area();
+    std::vector<Point> leftTrianglePoints = leftTriangle.generatePointsInside(1000);
+    std::vector<Point> rightTrianglePoint = rightTriangle.generatePointsInside(1000);
     return 0;
 }
 

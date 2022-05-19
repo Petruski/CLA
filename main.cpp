@@ -8,6 +8,7 @@
 #include "DataStreamIterator.hpp"
 #include "PositionParser.h"
 #include "Statistics.h"
+#include "Triangle.h"
 
 int main() {
 
@@ -137,13 +138,13 @@ int main() {
 //  std::cout << Statistics::multiBayesian(0.99, 0.97, Statistics::getLowPrior(), 0, 2) << std::endl;
 
     // Test for realistic venue
-    VenueRect venueRect;
-    venueRect.setCornerA(64.75002841754927, 20.96734211992527);
-    venueRect.setCornerB(64.75014769443297, 20.96727707635631);
-    venueRect.setCornerC(64.75013596699291, 20.967162411920313);
-    venueRect.setCornerD(64.75001697609392, 20.967226114384754);
-    std::cout.precision(14);
-    Statistics::calcSpecificity(venueRect, 12);
+//    VenueRect venueRect;
+//    venueRect.setCornerA(64.75031671628982, 20.966330771163626);
+//    venueRect.setCornerB(64.75038336195998, 20.966622461395538);
+//    venueRect.setCornerC(64.75041711378174, 20.966202695682487);
+//    venueRect.setCornerD(64.75048461729877, 20.966495056466663);
+//    std::cout.precision(14);
+//    Statistics::calcSpecificity(venueRect, 12);
 //    double SE = 64.75002841754927;
 //    double SW = 64.75001697609392;
 //    double NW = 64.75013596699291;
@@ -174,5 +175,11 @@ int main() {
 //        if (p.getLatitude() == NE)
 //            std::cout << " North East" << std::endl;
 //    }
+    Point one(0, 0);
+    Point two(0, 10);
+    Point three(10,10);
+    Triangle triangle(one, two, three);
+    Point isItInside(5, 5);
+    triangle.circleOuterSectionArea(isItInside, 5);
     return 0;
 }
