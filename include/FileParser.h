@@ -15,11 +15,10 @@
 
 class FileParser {
 private:
-    const std::string DEFAULT_FILENAME = "positions.txt";
     std::ifstream fileStream;
     std::string fileName;
 public:
-    FileParser() { fileName = DEFAULT_FILENAME; }
+    FileParser() { fileName = ""; }
     explicit FileParser(std::string aFileName): fileName(std::move(aFileName)) {}
 
     void setFilename(std::string aFilename);

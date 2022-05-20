@@ -6,8 +6,59 @@
 #include "include/VenueRect.h"
 #include "DataStreamIterator.hpp"
 #include "PositionParser.h"
+#include "Constants.h"
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    // string describing how to use cla
+    std::string appName(argv[0]);
+    std::string usage = "Usage: \n"
+            + appName + "\n"
+            + appName + "[filename]\n"
+            + appName + "[filename][limit][no_of_variables]";
+
+    // check arg
+    std::string fileName;
+    int monteCarloValues;
+    double limit;
+
+    if (argc > 4 || argc == 3) {
+        std::cout << usage << std::endl;
+        return 1;
+    }
+    if (argc == 1) {
+        fileName = DEFAULT_FILENAME;;
+        limit = IS_INSIDE_LIMIT;
+        monteCarloValues = NO_OF_RANDOM_MC_VARIABLES;
+    }
+    else if (argc == 2) {
+        fileName = argv[1];
+        limit = IS_INSIDE_LIMIT;
+        monteCarloValues = NO_OF_RANDOM_MC_VARIABLES;
+    }
+    else if (argc == 4) {
+
+        fileName = argv[1];
+        if (isdigit(argv[2][0])) {
+            limit = strtod(argv[2], nullptr);
+        } else {
+            std::cout << usage << std::endl;
+            return 1;
+        }
+
+        if (isdigit(argv[3][0])) {
+            monteCarloValues = strtol(argv[3], nullptr, 10);
+        } else {
+            std::cout << usage << std::endl;
+            return 1;
+        }
+
+    }
+
+    std::cout << "Filename is: " << fileName << std::endl;
+    std::cout << "Limit is: " << limit << std::endl;
+    std::cout << "Variable count is: " << monteCarloValues << std::endl;
+
 
     /* ****************************************
      * TESTING COORDINATES/POSITION CLASS
@@ -52,7 +103,7 @@ int main() {
      * TESTING FILE PARSER
      ******************************************/
 //    std::cout << "Testing FileParser class!" << std::endl;
-//    FileParser fileParser;
+//    FileParser fileParser(fileName);
 //    //fileParser.setFile("positions.txt");
 //    std::vector<Position> positions = fileParser.getPositions();
 //
