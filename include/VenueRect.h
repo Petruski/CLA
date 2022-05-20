@@ -9,23 +9,25 @@
 #define CLA_VENUERECT_H
 
 #include "Venue.h"
+#include "Constants.h"
 
 class VenueRect: public Venue {
 private:
-    // constants
-    const int NO_OF_RANDOM_MC_VARIABLES = 10000; // no of monte carlo variables, higher value means better accuracy of Monte Carlo
-
-    // >= Determine whether a position, drawn with a circle around it using accuracy as radius, is inside the venue
-    const double IS_INSIDE_LIMIT = 0.50; // [0-1] 1 means whole circle must be inside for the position to count as inside. 0.5 means half and 0 means none, etc
 
     // data members, the corners of the venue
     Coordinate cornerA, cornerB, cornerC, cornerD;
+
+    double limit; // limit for position to be considered as inside, 0 = always in. 0.5 = half. 1 = never in.
+    int monteCarloValueCount; // number of monte carlo variables
 
     // calculate area of a triangle given gps coordinates. Not real area, see documentation in source file.
     static double areaTriangle(Coordinate cA, Coordinate cB, Coordinate cC);
 
     static void setCorner(double latitude, double longitude, Coordinate &corner);
 public:
+    VenueRect(): limit(IS_INSIDE_LIMIT), monteCarloValueCount(NO_OF_RANDOM_MC_VARIABLES) {}
+    VenueRect(double aLimit, int mcValueCount): limit(aLimit), monteCarloValueCount(mcValueCount) {}
+
     // Setters
     void setCornerA(double latitude, double longitude);
     void setCornerB(double latitude, double longitude);
