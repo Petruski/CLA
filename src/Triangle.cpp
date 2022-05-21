@@ -2,6 +2,7 @@
 // Created by Petrus Söderström on 2022-05-18.
 //
 
+#include <cfloat>
 #include "Triangle.h"
 #include "Vector.h"
 
@@ -49,41 +50,111 @@ double Triangle::circleOuterSectionArea(Point circleCenter, int radius) {
     if (std::pow(m_adjacent.getX() - circleCenter.getX(), 2) + std::pow((m_adjacent.getY() - circleCenter.getY()), 2) <= std::pow(radius, 2))
         adjacent_vertex = true;
     /**
-     * Calculate points of intersections for each edge - Working with Euclidean vectors.
-     * The line will intersect the circle where |p + td - q| = r where p is the starting positional vector,
-     * d is the directional vector from p. t is some parameter along the line p + d. q is the positional vector of the
-     * center of the circle. The aim is to solve for t using a quadratic equation to solve for the intersections.
+     * Determine the bounds of the intersections.
      */
-
-    // Positional vectors
-    Vector circleCenterVector(circleCenter);
-    Vector originVector(m_origin);
-    Vector oppositeVector(m_opposite);
-    Vector adjacentVector(m_adjacent);
-
-     // Directional vectors
-    Vector originToAdjacent(m_origin, m_adjacent);
-    Vector originToOpposite(m_origin, m_opposite);
-    Vector adjacentToOpposite(m_adjacent, m_opposite);
-    Vector circumferenceVector(circleCenter, Point(0, radius)); // Arbitrary point on the circumference
-
-    // Calculate the radii vector expression given the radius and some arbitrary point on the circumference
-    Vector radiusVector = (circumferenceVector - circleCenterVector) * (circumferenceVector - circleCenterVector);
-
-    // Vector pairs of positional and directional vectors
-    std::vector<std::tuple<Vector, Vector>> vectorTuple{std::tuple<Vector, Vector>(originVector, originToAdjacent),
-                                                        std::tuple<Vector, Vector>(oppositeVector, originToOpposite),
-                                                        std::tuple<Vector, Vector>(adjacentVector, adjacentToOpposite)};
-    // Form a quadratic equation given these vectors and the circle centre and its radius to solve for its roots
-    for (std::tuple<Vector, Vector> tuple : vectorTuple) {
-        Vector a = std::get<1>(tuple) * std::get<1>(tuple);
-        Vector b = ((std::get<1>(tuple) * std::get<0>(tuple)) - (std::get<1>(tuple) * circleCenter)) * 2.0;
-        Vector c = (std::get<0>(tuple) * std::get<0>(tuple)) + (circleCenterVector * circleCenterVector) - (std::get<0>(tuple) * 2.0 * circleCenter) - radiusVector;
-        if ((b * b) < a * c * 4.0)
-            continue;
-        Vector t_minus = (-b - ((b * b - a * c * 4.0).squareRoot())) / a * 2.0;
-        Vector t_plus = (-b + ((b * b - a * c * 4.0).squareRoot())) / a * 2.0;
+    double min_x, min_y = DBL_MAX;
+    double max_x, max_y = -DBL_MAX;
+    for (Point p : vertices) {
+        if (p.getX() < min_x) {
+            min_x = p.getX();
+        }
+        if (p.getY() < min_y) {
+            min_y = p.getY();
+        }
+        if (p.getX() > max_x) {
+            max_x = p.getX();
+        }
+        if (p.getY() > max_y) {
+            max_y = p.getY();
+        }
     }
+    /**
+    * Calculate the slopes of each edge, then solve for the intersections using the circleLineIntersectionQuadratic formula
+    * The equation of the line will be in the slope-intercept form y = mx + b
+    */
+    double origin_to_opposite_slope = (m_origin.getY() - m_opposite.getY()) / (m_origin.getX() - m_opposite.getX());
+    double origin_to_adjacent_slope = (m_origin.getY() - m_adjacent.getY() / (m_origin.getX() - m_adjacent.getX()));
+    double opposite_to_adjacent_slope = ((m_opposite.getY() - m_adjacent.getY()) / (m_opposite.getX() - m_adjacent.getX()));
+    double origin_to_opposite_y_intercept = m_origin.getY() - (origin_to_opposite_slope * m_origin.getX());
+    double origin_to_adjacent_y_intercept = m_origin.getY() - (origin_to_adjacent_slope * m_origin.getX());
+    double opposite_to_adjacent_y_intercept = m_opposite.getY() - (opposite_to_adjacent_slope * m_opposite.getX());
 
+    /**
+    * Define the equation of the circle where x^2 + y^2 = a^2 where a is the radius
+    * Solve the circleLineIntersectionQuadratic equation for each of the triangle edges
+    */
+    double origin_to_opposite_addition_x = circleLineIntersectionQuadratic(origin_to_opposite_slope,
+                                                                           origin_to_opposite_y_intercept, radius,
+                                                                           circleCenter, true);
+    double origin_to_opposite_subtraction_x = circleLineIntersectionQuadratic(origin_to_opposite_slope,
+                                                                              origin_to_opposite_y_intercept, radius,
+                                                                              circleCenter, false);
+    double origin_to_adjacent_addition_x = circleLineIntersectionQuadratic(origin_to_adjacent_slope,
+                                                                           origin_to_adjacent_y_intercept, radius,
+                                                                           circleCenter, true);
+    double origin_to_adjacent_subtraction_x = circleLineIntersectionQuadratic(origin_to_adjacent_slope,
+                                                                              origin_to_adjacent_y_intercept, radius,
+                                                                              circleCenter, false);
+    double opposite_to_adjacent_addition_x = circleLineIntersectionQuadratic(opposite_to_adjacent_slope,
+                                                                             opposite_to_adjacent_y_intercept, radius,
+                                                                             circleCenter, true);
+    double opposite_to_adjacent_subtraction_x = circleLineIntersectionQuadratic(opposite_to_adjacent_slope,
+                                                                                opposite_to_adjacent_y_intercept,
+                                                                                radius, circleCenter, false);
+    /**
+     * Add all points of interception between each edge and the circle
+     */
+    std::vector<Point> interceptPoints;
+    addIntersectionPoint(interceptPoints, origin_to_opposite_slope, origin_to_opposite_y_intercept,
+                         origin_to_opposite_addition_x, min_x, min_y, max_x, max_y);
+    addIntersectionPoint(interceptPoints, origin_to_opposite_slope, origin_to_opposite_y_intercept,
+                         origin_to_opposite_subtraction_x, min_x, min_y, max_x, max_y);
+    addIntersectionPoint(interceptPoints, origin_to_adjacent_slope, origin_to_adjacent_y_intercept,
+                         origin_to_adjacent_addition_x, min_x, min_y, max_x, max_y);
+    addIntersectionPoint(interceptPoints, origin_to_adjacent_slope, origin_to_adjacent_y_intercept,
+                         origin_to_adjacent_subtraction_x, min_x, min_y, max_x, max_y);
+    addIntersectionPoint(interceptPoints, opposite_to_adjacent_slope, opposite_to_adjacent_y_intercept,
+                         opposite_to_adjacent_addition_x, min_x, min_y, max_x, max_y);
+    addIntersectionPoint(interceptPoints, opposite_to_adjacent_slope, opposite_to_adjacent_y_intercept,
+                         opposite_to_adjacent_subtraction_x, min_x, min_y, max_x, max_y);
+    removeDuplicates(interceptPoints);
     return 0;
+}
+
+double Triangle::circleLineIntersectionQuadratic(double slope, double intercept, double radius, Point circleCenter, bool positive) {
+    int flip = -1;
+    if (positive) {
+       flip = 1;
+    }
+    double a = (1 + std::pow(slope, 2));
+    double b = 2 * (slope * intercept - slope * circleCenter.getY() - circleCenter.getX());
+    double c = std::pow(intercept, 2) -
+               std::pow(radius, 2) +
+               std::pow(circleCenter.getX(), 2) -
+               (2 * intercept * circleCenter.getY()) +
+               std::pow(circleCenter.getY(), 2);
+    if (std::pow(b, 2) < 4 * a * c) {
+        return -DBL_MAX;
+    }
+    return (-b + (flip * std::sqrt(std::pow(b, 2) - 4 * a * c))) / (2 * a);
+}
+
+void
+Triangle::addIntersectionPoint(std::vector<Point> &points, double slope, double yIntercept, double xValue, double min_x,
+                               double min_y, double max_x, double max_y) {
+    if (min_x <= xValue && xValue <= max_x) {
+        double y = slope * xValue + yIntercept;
+        if (min_y <= y && y <= max_y) {
+            points.emplace_back(Point(xValue, y));
+        }
+    }
+}
+
+void Triangle::removeDuplicates(std::vector<Point> &points) {
+    std::sort(points.begin(), points.end(), [](const Point &lhs, const Point &rhs) {
+        return lhs.getX() < rhs.getX();
+    });
+    points.erase(std::unique(points.begin(), points.end(), [](const Point &lhs, const Point &rhs) {
+        return lhs.getX() == rhs.getX() && lhs.getY() == rhs.getY();
+    }), points.end());
 }

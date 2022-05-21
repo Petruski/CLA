@@ -12,7 +12,11 @@
 class Triangle {
 public:
     Triangle(Point origin, Point adjacent, Point opposite) :
-                        m_origin(origin), m_adjacent(adjacent), m_opposite(opposite) {}
+                        m_origin(origin), m_adjacent(adjacent), m_opposite(opposite) {
+        vertices.push_back(m_origin);
+        vertices.push_back(m_adjacent);
+        vertices.push_back(m_opposite);
+    }
     // Generates a collection of points inside the triangle
     std::vector<Point> generatePointsInside(int amount);
     // Get area of the triangle
@@ -21,7 +25,11 @@ public:
     double circleOuterSectionArea(Point circleCenter, int radius);
 private:
     double area(double x1, double y1, double x2, double y2, double x3, double y3);
+    double circleLineIntersectionQuadratic(double slope, double intercept, double radius, Point circleCenter, bool positive);
+    void addIntersectionPoint(std::vector<Point> &points, double slope, double yIntercept, double xValue, double min_x, double min_y, double max_x, double max_y);
+    void removeDuplicates(std::vector<Point> &points);
     Point m_origin, m_adjacent, m_opposite;
+    std::vector<Point> vertices;
 };
 
 

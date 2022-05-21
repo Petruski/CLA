@@ -176,10 +176,10 @@ int main() {
 //            std::cout << " North East" << std::endl;
 //    }
     Point one(0, 0);
-    Point two(0, 10);
-    Point three(10,10);
+    Point two(5, 10);
+    Point three(10,5);
     Triangle triangle(one, two, three);
     Point isItInside(5, 5);
-    triangle.circleOuterSectionArea(isItInside, 5);
+    triangle.circleOuterSectionArea(isItInside, 10);
     return 0;
 }
