@@ -9,7 +9,6 @@
 #include "PositionParser.h"
 #include "Statistics.h"
 #include "Triangle.h"
-=======
 #include "Constants.h"
 
 double toDouble(char *c) {
