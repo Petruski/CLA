@@ -42,7 +42,15 @@ Position PositionParser::average(DataStreamIterator<Position> &iterator, int amo
             counter++;
         }
     }
-    return {latitudeSum / counter, longitudeSum / counter, accuracySum / counter, lastTime, lastProvider};
+
+    Position p (accuracySum / counter, lastTime, lastProvider);
+    try {
+        p.setLatitude(latitudeSum / counter);
+        p.setLongitude(longitudeSum / counter);
+    } catch (std::out_of_range &e) {
+        std::cout << e.what();
+    }
+    return p;
 }
 
 /**

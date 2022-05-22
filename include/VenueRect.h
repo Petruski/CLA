@@ -1,27 +1,40 @@
-//
-// Created by dreadlopp on 2022-04-26.
-//
+/**
+ * @author Petrus Söderström
+ * @author Mattias Lindell
+ * @date 2022-04-26
+ * @brief The class represents a rectangular venue
+ */
 
 #ifndef CLA_VENUERECT_H
 #define CLA_VENUERECT_H
 
-
 #include "Venue.h"
+#include "Constants.h"
 
 class VenueRect: public Venue {
 private:
-    const int NO_OF_RANDOM_MC_VARIABLES = 10000; // no of monte carlo variables
-    const double IS_INSIDE_LIMIT = 0.50; // >= 1 means whole position with error margin must be inside, <= 0 means always outside
+
+    // data members, the corners of the venue
     Coordinate cornerA, cornerB, cornerC, cornerD;
 
-public:
-    VenueRect() {}
+    double limit; // limit for position to be considered as inside, 0 = always in. 0.5 = half. 1 = never in.
+    int monteCarloValueCount; // number of monte carlo variables
 
+    // calculate area of a triangle given gps coordinates. Not real area, see documentation in source file.
+    static double areaTriangle(Coordinate cA, Coordinate cB, Coordinate cC);
+
+    static void setCorner(double latitude, double longitude, Coordinate &corner);
+public:
+    VenueRect(): limit(IS_INSIDE_LIMIT), monteCarloValueCount(NO_OF_RANDOM_MC_VARIABLES) {}
+    VenueRect(double aLimit, int mcValueCount): limit(aLimit), monteCarloValueCount(mcValueCount) {}
+
+    // Setters
     void setCornerA(double latitude, double longitude);
     void setCornerB(double latitude, double longitude);
     void setCornerC(double latitude, double longitude);
     void setCornerD(double latitude, double longitude);
 
+    // sum of all sides AB, BC, CD, DA
     double getCircumference() override;
 
     // check if position is inside using monte carlo method
@@ -31,10 +44,12 @@ public:
     // being on the border counts as inside
     bool isInside(double latitude, double longitude);
 
+
     // get all coordinates associated with venue rectangle
     [[nodiscard]] std::vector<Coordinate> getCorners() const override;
     double areaTriangle(Coordinate ca, Coordinate cb, Coordinate cc);
-};
 
+
+};
 
 #endif //CLA_VENUERECT_H

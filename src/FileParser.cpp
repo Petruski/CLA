@@ -1,11 +1,16 @@
 //
-// Created by dreadlopp on 2022-04-26.
+// Created by Mattias Lindell on 2022-04-26.
 //
 
 #include <sstream>
 #include <iostream>
+#include <utility>
 #include "../include/FileParser.h"
 
+/**
+ * Reads GNSS positions from a csv file
+ * @return a vector with all positions
+ */
 std::vector<Position> FileParser::getPositions() {
 
     // open file
@@ -33,8 +38,15 @@ std::vector<Position> FileParser::getPositions() {
 
         ss >> time >> provider >> accuracy >> latitude >> longitude;
 
-        Position pos(latitude, longitude, accuracy, time, provider);
-        positions.push_back(pos);
+        Position pos(accuracy, time, provider);
+        try {
+            pos.setLatitude(latitude);
+            pos.setLongitude(longitude);
+            positions.push_back(pos);
+        } catch (std::out_of_range &e) {
+            std::cout << e.what() << ", position is thrown away!" << std::endl;
+        }
+
     }
 
     // close file and return vector with all positions
@@ -42,4 +54,8 @@ std::vector<Position> FileParser::getPositions() {
     return positions;
 }
 
-void FileParser::setFilename(std::string aFilename) { fileName = aFilename; }
+/**
+ * sets filename
+ * @param aFilename the filename
+ */
+void FileParser::setFilename(std::string aFilename) { fileName = std::move(aFilename); }

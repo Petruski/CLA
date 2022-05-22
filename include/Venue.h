@@ -1,6 +1,9 @@
-//
-// Created by dreadlopp on 2022-04-26.
-//
+/**
+ * @author Petrus Söderström
+ * @author Mattias Lindell
+ * @date 2022-04-26
+ * @brief Base class of venues
+ */
 
 #ifndef CLA_VENUE_H
 #define CLA_VENUE_H
@@ -16,9 +19,9 @@ protected:
     Coordinate mapMarker;
 
 public:
-    [[nodiscard]] const std::string &getName() const { return name; }
-    void setName(const std::string &name) { Venue::name = name; }
-    [[nodiscard]] const Coordinate &getMapMarker() const { return mapMarker; }
+    [[nodiscard]] const std::string &getName() const;
+    void setName(const std::string &aName);
+    [[nodiscard]] const Coordinate &getMapMarker() const;
     void setMapMarker(double latitude, double longitude);
 
     virtual double getCircumference() = 0;

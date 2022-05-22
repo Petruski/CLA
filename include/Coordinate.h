@@ -1,10 +1,12 @@
-//
-// Created by dreadlopp on 2022-04-26.
-//
+/**
+ * @author Petrus Söderström
+ * @author Mattias Lindell
+ * @date 2022-04-26
+ * @brief The class represents a coordinate on earth written in decimal degrees
+ */
 
 #ifndef CLA_COORDINATE_H
 #define CLA_COORDINATE_H
-
 
 #include <numbers>
 
@@ -14,16 +16,16 @@ protected:
     double longitude;
 public:
     Coordinate(): latitude(0), longitude(0) {}
-    Coordinate(double latitude, double longitude);
 
+    // getters and setters
     [[nodiscard]] double getLatitude() const;
     void setLatitude(double aLatitude);
     [[nodiscard]] double getLongitude() const;
     void setLongitude(double aLongitude);
 
-    // real earth distance with approximated earth radius
-    double getDistanceTo(Coordinate coordinate);
-    double getDistanceTo(double lat, double lon);
+    // get earth radius at this coordinate in meters
+    [[nodiscard]] double getEarthRadius() const;
+
 
     // Get bearing (angle) between two coordinates
     double getBearingTo(Coordinate coordinate);
@@ -32,10 +34,17 @@ public:
     double getEucDistanceTo(Coordinate coordinate) const;
     double getEucDistanceTo(double lat, double lon) const;
 
-private:
-    double toRadian(double degrees) { return degrees * std::numbers::pi / 180 ; }
+    // real earth distance in meters
+    [[nodiscard]] double getDistanceTo(Coordinate coordinate) const;
+    [[nodiscard]] double getDistanceTo(double lat, double lon) const;
 
+
+    // Euclidean distance in decimal degrees
+    [[nodiscard]] double getEucDistanceTo(Coordinate coordinate) const;
+    [[nodiscard]] double getEucDistanceTo(double lat, double lon) const;
+
+    // convert decimal degrees to radians
+    static double toRadian(double degrees);
 };
-
 
 #endif //CLA_COORDINATE_H
