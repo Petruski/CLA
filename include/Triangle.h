@@ -20,6 +20,8 @@ public:
     }
     // Generates a collection of points inside the triangle
     std::vector<Point> generatePointsInside(int amount);
+    // Generates a collection of points outside the triangle by some fixed distance
+    std::vector<Point> generatePointsOutside(int amount, int distance);
     // Get area of the triangle
     double area();
     // Calculate the area of the outer section between a circle and the triangle

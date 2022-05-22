@@ -30,6 +30,30 @@ std::vector<Point> Triangle::generatePointsInside(int amount) {
     return points;
 }
 
+std::vector<Point> Triangle::generatePointsOutside(int amount, int distance) {
+    std::vector<Point> points;
+    // Create a random device and generator
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_real_distribution<double> dis(0, 1);
+    // Generate a random point according to uniform distribution inside a quadrilateral
+    // Where x = a1v1 + a2v2 where A1, A2 [0,1] and v1, v2 are two of the vertices of the triangle.
+    while (points.size() < amount) {
+        double x = dis(gen) * m_adjacent.getX() + dis(gen) * m_opposite.getX();
+        double y = dis(gen) * m_adjacent.getY() + dis(gen) * m_opposite.getY();
+        // Check if the point is inside the interior of the triangle by creating three triangles from this point
+        // Compare the area of those triangles to the original triangle. If they equal, it is inside.
+        double original_area = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
+        double area_one = area(x, y, m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
+        double area_two = area(m_origin.getX(), m_origin.getY(), x, y, m_adjacent.getX(), m_adjacent.getY());
+        double area_three = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), x, y);
+        if (area_one + area_two + area_three == original_area) {
+            points.emplace_back(x - distance, y - distance);
+        }
+    }
+    return points;
+}
+
 double Triangle::area(double x1, double y1, double x2, double y2, double x3, double y3) {
     return std::abs((x1*(y2-y3) + x2*(y3-y1)+ x3*(y1-y2)) / 2.0);
 }
@@ -316,3 +340,5 @@ double Triangle::calculateOuterCircleSectionArea(const std::vector<std::tuple<Ed
     // Error code
     return -1;
 }
+
+
