@@ -4,7 +4,6 @@
 
 #include <cfloat>
 #include "Triangle.h"
-#include "Vector.h"
 
 std::vector<Point> Triangle::generatePointsInside(int amount) {
     std::vector<Point> points;
