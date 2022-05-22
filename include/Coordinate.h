@@ -30,10 +30,6 @@ public:
     // Get bearing (angle) between two coordinates
     double getBearingTo(Coordinate coordinate);
 
-    // euclidian distance
-    double getEucDistanceTo(Coordinate coordinate) const;
-    double getEucDistanceTo(double lat, double lon) const;
-
     // real earth distance in meters
     [[nodiscard]] double getDistanceTo(Coordinate coordinate) const;
     [[nodiscard]] double getDistanceTo(double lat, double lon) const;

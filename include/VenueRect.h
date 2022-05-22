@@ -47,7 +47,6 @@ public:
 
     // get all coordinates associated with venue rectangle
     [[nodiscard]] std::vector<Coordinate> getCorners() const override;
-    double areaTriangle(Coordinate ca, Coordinate cb, Coordinate cc);
 
 
 };

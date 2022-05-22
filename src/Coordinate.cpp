@@ -129,8 +129,9 @@ double Coordinate::getEucDistanceTo(double lat, double lon) const {
 
 double Coordinate::getBearingTo(Coordinate coordinate) {
     double distance_y = coordinate.getLatitude() - this->getLatitude();
-    double distance_x = std::cos(M_PI/180 * this->getLatitude()) * (coordinate.getLongitude() - this->getLongitude());
-    return std::atan2(distance_y, distance_x) * 180/M_PI;
+    double distance_x = std::cos(M_PI / 180 * this->getLatitude()) * (coordinate.getLongitude() - this->getLongitude());
+    return std::atan2(distance_y, distance_x) * 180 / M_PI;
+}
 
 /**
  * Get earth radius at this coordinate's position
@@ -138,7 +139,7 @@ double Coordinate::getBearingTo(Coordinate coordinate) {
  */
 double Coordinate::getEarthRadius() const {
 
-    // Earth radius at equator a = 6378137.0
+    // Earth radius at the equator a = 6378137.0
     // Earth radius at pole b = 6356752.
     // source: https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html
 
