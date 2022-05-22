@@ -8,6 +8,7 @@
 
 #include <random>
 #include "Point.h"
+#include "Edge.h"
 
 class Triangle {
 public:
@@ -26,8 +27,8 @@ public:
 private:
     double area(double x1, double y1, double x2, double y2, double x3, double y3);
     double circleLineIntersectionQuadratic(double slope, double intercept, double radius, Point circleCenter, bool positive);
-    void addIntersectionPoint(std::vector<Point> &points, double slope, double yIntercept, double xValue, double min_x, double min_y, double max_x, double max_y);
-    void removeDuplicates(std::vector<Point> &points);
+    void addIntersectionPoint(std::vector<std::tuple<Edge, Point>> &points, Point a, Point b, double slope, double yIntercept, double xValue, double min_x, double min_y, double max_x, double max_y);
+    double calculateOuterCircleSectionArea(const std::vector<std::tuple<Edge, Point>>& intersections, Point circleCenter, double radius, const std::vector<Point>& innerVertices);
     Point m_origin, m_adjacent, m_opposite;
     std::vector<Point> vertices;
 };

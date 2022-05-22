@@ -5,7 +5,7 @@
 #include "Statistics.h"
 #include "PositionParser.h"
 #include "Point.h"
-#include "Vertex.h"
+#include "Edge.h"
 #include "Triangle.h"
 #include <cmath>
 #include <vector>

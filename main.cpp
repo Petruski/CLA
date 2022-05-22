@@ -179,7 +179,7 @@ int main() {
     Point two(5, 10);
     Point three(10,5);
     Triangle triangle(one, two, three);
-    Point isItInside(5, 5);
-    triangle.circleOuterSectionArea(isItInside, 10);
+    Point isItInside(6, 5);
+    triangle.circleOuterSectionArea(isItInside, 7);
     return 0;
 }
