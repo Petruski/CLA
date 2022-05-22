@@ -31,9 +31,9 @@ public:
     static double singleBayesian(double specificity, double sensitivity, double prior);
     static double multiBayesian(double specificity, double sensitivity, double prior, int negativeResults, int positiveResults);
     // P(T+|D) - How likely are you to be placed inside given you are inside
-    static double calcSpecificity(const VenueRect& venueRect, int margin);
+    static double calcSpecificity(const VenueRect& venueRect, int margin, int iterations);
     // P(~T|~D) - How likely are you to be placed outside given you are outside
-    static double calcSensitivity(const VenueRect& venueRect, int margin);
+    static double calcSensitivity(const VenueRect& venueRect, int margin, int iterations);
     static double getLowPrior() { return m_prior_probabilities[0]; };
     static double getMedPrior() { return m_prior_probabilities[1]; };
     static double getHighPrior() { return m_prior_probabilities[2]; };

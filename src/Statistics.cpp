@@ -26,7 +26,7 @@ double Statistics::singleBayesian(double specificity, double sensitivity, double
     return multiBayesian(specificity, sensitivity, prior, 0, 1);
 }
 
-double Statistics::calcSpecificity(const VenueRect& venueRect, int margin) {
+double Statistics::calcSpecificity(const VenueRect& venueRect, int margin, int iterations) {
     std::vector<Coordinate> corners = venueRect.getCorners();
     DataStreamIterator<Coordinate> cornerIt (corners);
     // Order the corners SW, NW, NE, SE
@@ -49,11 +49,22 @@ double Statistics::calcSpecificity(const VenueRect& venueRect, int margin) {
     Triangle rightTriangle(ne_point, nw_point, se_point);
     double leftTriangleArea = leftTriangle.area();
     double rightTriangleArea = rightTriangle.area();
-    std::vector<Point> leftTrianglePoints = leftTriangle.generatePointsInside(1000);
-    std::vector<Point> rightTrianglePoint = rightTriangle.generatePointsInside(1000);
-    return 0;
+    std::vector<Point> leftTrianglePoints = leftTriangle.generatePointsInside(iterations);
+    std::vector<Point> rightTrianglePoint = rightTriangle.generatePointsInside(iterations);
+    // TODO - Area that falls inside the rectangle but is outside one of the triangles are not accounted for
+    double totalLeftTriangleArea = 0;
+    double totalRightTriangleArea = 0;
+    for (const Point& p : leftTrianglePoints) {
+        totalLeftTriangleArea += leftTriangle.circleOuterSectionArea(p, margin);
+    }
+    for (const Point& p : rightTrianglePoint) {
+        totalRightTriangleArea += rightTriangle.circleOuterSectionArea(p, margin);
+    }
+    // Return a weighted percentage of areas outside the triangles
+    return leftTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalLeftTriangleArea / (M_PI * std::pow(margin, 2) * iterations)) +
+           rightTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalRightTriangleArea / (M_PI * std::pow(margin, 2) * iterations));
 }
 
-double Statistics::calcSensitivity(const VenueRect& venueRect, int margin) {
+double Statistics::calcSensitivity(const VenueRect& venueRect, int margin, int iterations) {
     return 0;
 }
