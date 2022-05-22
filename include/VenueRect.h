@@ -43,6 +43,13 @@ public:
     // check if exact coordinate is inside venue
     // being on the border counts as inside
     bool isInside(double latitude, double longitude);
+
+
+    // get all coordinates associated with venue rectangle
+    [[nodiscard]] std::vector<Coordinate> getCorners() const override;
+    double areaTriangle(Coordinate ca, Coordinate cb, Coordinate cc);
+
+
 };
 
 #endif //CLA_VENUERECT_H

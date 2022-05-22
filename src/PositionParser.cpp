@@ -52,3 +52,30 @@ Position PositionParser::average(DataStreamIterator<Position> &iterator, int amo
     }
     return p;
 }
+
+/**
+ *
+ * @param iterator
+ * Guarantees SW, NW, NE, SE ordering
+ */
+std::vector<Coordinate> PositionParser::order(DataStreamIterator<Coordinate> &iterator) {
+    std::vector<Coordinate> vector;
+    while(iterator.hasNext()) {
+        vector.push_back(iterator.next());
+    }
+    // Split into southern ([0], [1]) and northern ([2], [3])
+    std::sort(vector.begin(), vector.end(), [](const Coordinate& a, const Coordinate& b) {
+        return a.getLatitude() < b.getLatitude();
+    });
+    std::vector<Coordinate> south {vector[0], vector[1]};
+    std::vector<Coordinate> north {vector[2], vector[3]};
+    // Sort with a west priority
+    std::sort(south.begin(), south.end(), [](const Coordinate& a, const Coordinate& b) {
+        return a.getLongitude() < b.getLongitude();
+    });
+    std::sort(north.begin(), north.end(), [](const Coordinate& a, const Coordinate& b) {
+        return a.getLongitude() < b.getLongitude();
+    });
+    // Return South West, North West, North East, South East
+    return std::vector<Coordinate> {south[0], north[0], north[1], south[1]};
+}

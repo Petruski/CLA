@@ -126,6 +126,12 @@ double Coordinate::getEucDistanceTo(double lat, double lon) const {
     return getEucDistanceTo(c);
 }
 
+
+double Coordinate::getBearingTo(Coordinate coordinate) {
+    double distance_y = coordinate.getLatitude() - this->getLatitude();
+    double distance_x = std::cos(M_PI/180 * this->getLatitude()) * (coordinate.getLongitude() - this->getLongitude());
+    return std::atan2(distance_y, distance_x) * 180/M_PI;
+
 /**
  * Get earth radius at this coordinate's position
  * @return the radius in meters
@@ -151,4 +157,5 @@ double Coordinate::getEarthRadius() const {
  */
 double Coordinate::toRadian(double degrees) {
     return degrees * std::numbers::pi / 180 ;
+
 }

@@ -163,6 +163,10 @@ double VenueRect::areaTriangle(Coordinate cA, Coordinate cB, Coordinate cC) {
     return std::sqrt( s * (s-a) * (s-b) * (s-c));
 }
 
+std::vector<Coordinate> VenueRect::getCorners() const {
+    return std::vector<Coordinate> {cornerA, cornerB, cornerC, cornerD};
+}
+
 
 
 

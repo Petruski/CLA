@@ -26,6 +26,7 @@ public:
 
     virtual double getCircumference() = 0;
     virtual bool isInside(Position position) = 0;
+    virtual std::vector<Coordinate> getCorners() const = 0;
 
     virtual  ~Venue() {}
 };

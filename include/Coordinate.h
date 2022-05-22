@@ -26,9 +26,18 @@ public:
     // get earth radius at this coordinate in meters
     [[nodiscard]] double getEarthRadius() const;
 
+
+    // Get bearing (angle) between two coordinates
+    double getBearingTo(Coordinate coordinate);
+
+    // euclidian distance
+    double getEucDistanceTo(Coordinate coordinate) const;
+    double getEucDistanceTo(double lat, double lon) const;
+
     // real earth distance in meters
     [[nodiscard]] double getDistanceTo(Coordinate coordinate) const;
     [[nodiscard]] double getDistanceTo(double lat, double lon) const;
+
 
     // Euclidean distance in decimal degrees
     [[nodiscard]] double getEucDistanceTo(Coordinate coordinate) const;
