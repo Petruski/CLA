@@ -39,45 +39,53 @@ int main(int argc, char *argv[]) {
     // check arg
     std::string fileName;
     int monteCarloValues;
-    double limit, cornerA, cornerB, cornerC, cornerD;
+    double limit, cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat, cornerC_lon, cornerD_lat, cornerD_lon;
 
-    if (!(argc == 5 || argc == 6 || argc == 8)) {
+    if (!(argc == 9 || argc == 10 || argc == 12)) {
         std::cout << usage << std::endl;
         return 1;
     }
-    if (argc == 5) {
+    if (argc == 9) {
         fileName = DEFAULT_FILENAME;;
         limit = IS_INSIDE_LIMIT;
         monteCarloValues = NO_OF_RANDOM_MC_VARIABLES;
 
         try {
-            cornerA = toDouble(argv[1]);
-            cornerB = toDouble(argv[2]);
-            cornerC = toDouble(argv[3]);
-            cornerD = toDouble(argv[4]);
+            cornerA_lat = toDouble(argv[1]);
+            cornerA_lon = toDouble(argv[2]);
+            cornerB_lat = toDouble(argv[3]);
+            cornerB_lon = toDouble(argv[4]);
+            cornerC_lat = toDouble(argv[5]);
+            cornerC_lon = toDouble((argv[6]));
+            cornerD_lat = toDouble(argv[7]);
+            cornerD_lon = toDouble(argv[8]);
         } catch (std::runtime_error &e) {
             std::cout << "Exception: " << e.what() << std::endl;
             std::cout << usage << std::endl;
             return 1;
         }
     }
-    else if (argc == 6) {
+    else if (argc == 10) {
         fileName = argv[1];
         limit = IS_INSIDE_LIMIT;
         monteCarloValues = NO_OF_RANDOM_MC_VARIABLES;
 
         try {
-            cornerA = toDouble(argv[2]);
-            cornerB = toDouble(argv[3]);
-            cornerC = toDouble(argv[4]);
-            cornerD = toDouble(argv[5]);
+            cornerA_lat = toDouble(argv[2]);
+            cornerA_lon = toDouble(argv[3]);
+            cornerB_lat = toDouble(argv[4]);
+            cornerB_lon = toDouble(argv[5]);
+            cornerC_lat = toDouble(argv[6]);
+            cornerC_lon = toDouble((argv[7]));
+            cornerD_lat = toDouble(argv[8]);
+            cornerD_lon = toDouble(argv[9]);
         } catch (std::runtime_error &e) {
             std::cout << "Exception: " << e.what() << std::endl;
             std::cout << usage << std::endl;
             return 1;
         }
     }
-    // if argc == 8
+    // if argc == 12
     else  {
 
         fileName = argv[1];
@@ -85,10 +93,14 @@ int main(int argc, char *argv[]) {
         try {
             limit = toDouble(argv[2]);
             monteCarloValues = toInt(argv[3]);
-            cornerA = toDouble(argv[4]);
-            cornerB = toDouble(argv[5]);
-            cornerC = toDouble(argv[6]);
-            cornerD = toDouble(argv[7]);
+            cornerA_lat = toDouble(argv[4]);
+            cornerA_lon = toDouble(argv[5]);
+            cornerB_lat = toDouble(argv[6]);
+            cornerB_lon = toDouble(argv[7]);
+            cornerC_lat = toDouble(argv[8]);
+            cornerC_lon = toDouble((argv[9]));
+            cornerD_lat = toDouble(argv[10]);
+            cornerD_lon = toDouble(argv[11]);
         } catch (std::runtime_error &e) {
             std::cout << "Exception: " << e.what() << std::endl;
             std::cout << usage << std::endl;
@@ -100,11 +112,12 @@ int main(int argc, char *argv[]) {
     std::cout << "Filename is: " << fileName << std::endl;
     std::cout << "Limit is: " << limit << std::endl;
     std::cout << "Variable count is: " << monteCarloValues << std::endl;
-    std::cout << "Corner A: " << cornerA << std::endl;
-    std::cout << "Corner B: " << cornerB << std::endl;
-    std::cout << "Corner C: " << cornerC << std::endl;
-    std::cout << "Corner D: " << cornerD << std::endl;
+    std::cout << "Corner A: " << cornerA_lat << ", " << cornerA_lon << std::endl;
+    std::cout << "Corner B: " << cornerB_lat << ", " << cornerB_lon << std::endl;
+    std::cout << "Corner C: " << cornerC_lat << ", " << cornerC_lon << std::endl;
+    std::cout << "Corner D: " << cornerD_lat << ", " << cornerD_lon << std::endl;
 
+    VenueRect venueRect;
 
     /* ****************************************
      * TESTING COORDINATES/POSITION CLASS
