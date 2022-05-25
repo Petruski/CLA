@@ -28,8 +28,8 @@ void CLA::startCLA() {
     // Set up variables for statistical analysis
     int positiveResults = 0;
     int negativeResults = 0;
-    double specificity = 0;
-    double sensitivity = 0;
+    double specificity;
+    double sensitivity;
 
     // Categorize each position as inside or outside
     for (const Position& p : positions) {
@@ -49,9 +49,9 @@ void CLA::startCLA() {
     double med_a_prior_CI = Statistics::multiBayesian(specificity, sensitivity, Statistics::getMedPrior(), negativeResults, positiveResults);
     double high_a_prior_CI = Statistics::multiBayesian(specificity, sensitivity, Statistics::getHighPrior(), negativeResults, positiveResults);
 
-    std::cout << "CI: " << low_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
-    std::cout << "CI: " << med_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
-    std::cout << "CI: " <<  high_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
+    std::cout << "Low CI: " << low_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
+    std::cout << "Med CI: " << med_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
+    std::cout << "High CI: " <<  high_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
 }
 
 void CLA::startShortestDistance() {

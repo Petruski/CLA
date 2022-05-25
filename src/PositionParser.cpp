@@ -18,6 +18,7 @@ void PositionParser::filter(DataStreamIterator<Position> &iterator, double aFilt
             iterator.remove();
         }
     }
+    iterator.reset();
 }
 /**
  * @param iterator
