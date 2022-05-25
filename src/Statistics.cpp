@@ -61,7 +61,7 @@ double Statistics::calcSensitivity(const VenueRect& venueRect, int margin, int i
         totalRightTriangleArea += rightTriangle.circleOuterSectionArea(p, margin);
     }
     // Return a weighted percentage of areas outside the triangles
-    return 1.0 - (leftTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalLeftTriangleArea / (M_PI * std::pow(margin, 2) * iterations)) +
+    return (leftTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalLeftTriangleArea / (M_PI * std::pow(margin, 2) * iterations)) +
            rightTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalRightTriangleArea / (M_PI * std::pow(margin, 2) * iterations)));
 }
 
