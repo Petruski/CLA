@@ -9,6 +9,7 @@
 #include <random>
 #include "Point.h"
 #include "Edge.h"
+#include <tuple>
 
 class Triangle {
 public:

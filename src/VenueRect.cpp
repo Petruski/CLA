@@ -79,17 +79,38 @@ double VenueRect::getCircumference() {
  */
 bool VenueRect::isInside(Position position) {
 
+    // create a position at the edge of the position circle perimeter
+    Coordinate edgeCoordinate = position.newCoordinate(0, position.getAccuracy());
+
+    // calculate distance in degrees
+    double accuracyDegrees = position.getEucDistanceTo(edgeCoordinate);
+
     // do monte carlo test
     double hits = 0; // number of generated positions that are both within position perimeter and within venue perimeter
+
     for (int i = 0; i < NO_OF_RANDOM_MC_VARIABLES; i++) {
 
         // Create random double generator that generates coordinates within a circle drawn around the position
         // where the radius is the accuracy.
         std::random_device rd;
         std::mt19937_64 gen(rd());
-        std::uniform_real_distribution<double> dis(-position.getAccuracy(), position.getAccuracy());
+        std::uniform_real_distribution<double> dis(-accuracyDegrees, accuracyDegrees);
         double latitude = position.getLatitude() + dis(gen);
         double longitude = position.getLongitude() + dis(gen);
+
+        // fix latitudes/longitudes
+        while (latitude < -90) {
+            latitude += 90;
+        }
+        while (latitude > 90) {
+            latitude += -90;
+        }
+        while (longitude < -180) {
+            longitude += 180;
+        }
+        while (longitude > 180) {
+            longitude += -180;
+        }
 
         // increase hits if coordinate is inside venue
         if (isInside(latitude, longitude))

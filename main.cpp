@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Corner C: " << cornerC_lat << ", " << cornerC_lon << std::endl;
     std::cout << "Corner D: " << cornerD_lat << ", " << cornerD_lon << std::endl;
 
-    VenueRect venueRect;
+
 
     /* ****************************************
      * TESTING COORDINATES/POSITION CLASS
@@ -166,8 +166,22 @@ int main(int argc, char *argv[]) {
 //    //fileParser.setFile("positions.txt");
 //    std::vector<Position> positions = fileParser.getPositions();
 //
+//    VenueRect venueRect(limit, monteCarloValues);
+//    venueRect.setCornerA(cornerA_lat, cornerA_lon);
+//    venueRect.setCornerB(cornerB_lat, cornerB_lon);
+//    venueRect.setCornerC(cornerC_lat, cornerC_lon);
+//    venueRect.setCornerD(cornerD_lat, cornerD_lon);
 //    for (auto e: positions) {
-//        std::cout << std::setprecision(15) << e.getTime() << "," << e.getProvider() << "," << e.getAccuracy() << "," << e.getLatitude() << "," << e.getLongitude() << std::endl;
+//        std::cout << std::setprecision(15) << e.getTime() << "," << e.getProvider() << "," << e.getAccuracy() << "," << e.getLatitude() << "," << e.getLongitude();
+//        if (venueRect.isInside(e.getLatitude(), e.getLongitude()))
+//            std::cout << " coordinate is INSIDE";
+//        else
+//            std::cout << " coordinate is OUTSIDE";
+//        if (venueRect.isInside(e))
+//            std::cout << " position is INSIDE";
+//        else
+//            std::cout << " position is OUTSIDE";
+//        std::cout << std::endl;
 //    }
 //     std::cout << std::endl;
     /* ****************************************
