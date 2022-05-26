@@ -56,10 +56,10 @@ double Coordinate::getDistanceTo(Coordinate coordinate) const {
     // use average radius from this and the other coordinate
     double radius = (getEarthRadius() + coordinate.getEarthRadius()) / 2;
 
-    double lat1 = toRadian(latitude);
-    double lat2 = toRadian(coordinate.latitude);
-    double lon1 = toRadian(longitude);
-    double lon2 = toRadian(coordinate.longitude);
+    double lat1 = toRadians(latitude);
+    double lat2 = toRadians(coordinate.latitude);
+    double lon1 = toRadians(longitude);
+    double lon2 = toRadians(coordinate.longitude);
 
     // use Haversine Formula to calculate distance between two coordinates on earth
     // φ = latitude in radians
@@ -145,7 +145,7 @@ double Coordinate::getEarthRadius() const {
 
     double a = 6378137.0;
     double b = 6356752.0;
-    double l = toRadian(latitude);
+    double l = toRadians(latitude);
 
     // radius r, latitude l: r(l) = √( ((a²*cos(l))² + (b²*sin(l))²) / ((a*cos(l)² + (b*sin(l)²) )
     return sqrt(  (pow(a * a * cos(l), 2) + pow(b * b * sin(l), 2)) / (pow(a * cos(l), 2) + pow(b * sin(l), 2)) );
@@ -156,7 +156,71 @@ double Coordinate::getEarthRadius() const {
  * @param degrees the value to convert
  * @return the converted value in radians
  */
-double Coordinate::toRadian(double degrees) {
-    return degrees * std::numbers::pi / 180 ;
+double Coordinate::toRadians(double degrees) {
+    return degrees * std::numbers::pi / 180;
 
 }
+
+/**
+ * Converts radians to decimal degrees
+ * @param radians the value to convert
+ * @return the converted value in decimal degrees
+ */
+double Coordinate::toDegrees(double radians) {
+    return radians * 180 / std::numbers::pi;
+}
+
+/**
+ * Add a decimal degrees value to a coordinate
+ * @param aLatitude the latitude value to add
+ * @param aLongitude the longitude value to add
+ */
+void Coordinate::add(double aLatitude, double aLongitude) {
+    latitude += aLatitude;
+    longitude += aLongitude;
+
+    while (latitude < -90) {
+        latitude += 90;
+    }
+    while (latitude > 90) {
+        latitude += -90;
+    }
+    while (longitude < -180) {
+        longitude += 180;
+    }
+    while (longitude > 180) {
+        longitude += -180;
+    }
+}
+
+/**
+ * A terminal coordinate, ie produce a new coordinate from a origin coordinate given a bearing and a distance
+ * @param bearing bearing in radians
+ * @param distance distance in meters
+ * @return
+ */
+Coordinate Coordinate::newCoordinate(double bearing, double distance) const {
+    double lat1 = toRadians(latitude);
+    double lon1 = toRadians(longitude);
+    double radius = getEarthRadius();
+    double ad = distance / radius;
+
+    // lat2 = asin(sin lat1 * cos ad + cos lat1 * sin ad * cos bearing)
+    // lon2 = lon1 + atan2(sin bearing * sin ad * cos lat1, cos ad - sin lat1 * sin lat2)
+    double lat2 = asin(sin(lat1) * cos(ad) + cos(lat1) * sin(ad) * cos(bearing));
+    double lon2 = lon1 + atan2(sin(bearing) * sin(ad) * cos(lat1), cos(ad) - sin(lat1) * sin(lat2));
+
+    Coordinate newCoordinate;
+    try{
+        newCoordinate.setLatitude(toDegrees(lat2));
+        newCoordinate.setLongitude(toDegrees(lon2));
+    } catch (std::out_of_range &e) {
+        throw e;
+    }
+
+    return newCoordinate;
+}
+
+
+
+
