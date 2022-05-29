@@ -22,5 +22,5 @@ add_executable(CustomerLocationAlgorithmApp
         include/DataStreamIterator.hpp
         src/PositionParser.cpp
         include/PositionParser.h src/Statistics.cpp include/Statistics.h include/Point.h include/Edge.h src/Triangle.cpp include/Triangle.h
-        include/PositionParser.h include/Constants.h)
+        include/PositionParser.h include/Constants.h src/CLA.cpp include/CLA.h)
 

@@ -10,6 +10,7 @@
 #include "Statistics.h"
 #include "Triangle.h"
 #include "Constants.h"
+#include "CLA.h"
 
 double toDouble(char *c) {
     if (isdigit(c[0])) {
@@ -108,7 +109,10 @@ int main(int argc, char *argv[]) {
         }
 
     }
-
+    // Initialize CLA
+    CLA cla(cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat,
+            cornerC_lon, cornerD_lat, cornerD_lon, monteCarloValues, limit, fileName);
+    cla.startCLA();
     std::cout << "Filename is: " << fileName << std::endl;
     std::cout << "Limit is: " << limit << std::endl;
     std::cout << "Variable count is: " << monteCarloValues << std::endl;

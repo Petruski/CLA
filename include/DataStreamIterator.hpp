@@ -25,6 +25,10 @@ public:
     void remove() {
         m_iterator = m_container.erase(--m_iterator);
     }
+
+    void reset() {
+        m_iterator = m_container.begin();
+    }
 private:
     std::vector<T> &m_container;
     typename std::vector<T>::iterator m_iterator;
