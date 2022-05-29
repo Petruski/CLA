@@ -55,5 +55,4 @@ void CLA::startCLA() {
 }
 
 void CLA::startShortestDistance() {
-
 }
