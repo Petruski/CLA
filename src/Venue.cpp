@@ -8,8 +8,8 @@
 
 /**
  * setter
- * @param latitude latitude of map marker
- * @param longitude longitude of map marker
+ * @param latitude m_latitude of map marker
+ * @param longitude m_longitude of map marker
  */
 void Venue::setMapMarker(double latitude, double longitude) {
     try {

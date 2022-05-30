@@ -7,13 +7,15 @@
 #include <random>
 #include <iomanip>
 #include "../include/VenueRect.h"
+#include "DataStreamIterator.hpp"
+#include "PositionParser.h"
 
 /**
  * Helper function for the setters
  * @param latitude
  * @param longitude
  * @param corner
- * @throws out_of_range exception if latitude or longitude is invalid
+ * @throws out_of_range exception if m_latitude or m_longitude is invalid
  */
 void VenueRect::setCorner(double latitude, double longitude, Coordinate &corner) {
     try {
@@ -30,8 +32,8 @@ void VenueRect::setCorner(double latitude, double longitude, Coordinate &corner)
  * @param longitude the corner's longitude
  * @throws out_of_range exception if latitude or longitude is invalid
  */
-void VenueRect::setCornerA(double latitude, double longitude) {
-    setCorner(latitude, longitude, cornerA);
+void VenueRect::setCornerSW(double latitude, double longitude) {
+    setCorner(latitude, longitude, m_cornerSW);
 }
 
 /**
@@ -40,8 +42,18 @@ void VenueRect::setCornerA(double latitude, double longitude) {
  * @param longitude the corner's longitude
  * @throws out_of_range exception if latitude or longitude is invalid
  */
-void VenueRect::setCornerB(double latitude, double longitude) {
-    setCorner(latitude, longitude, cornerB);
+void VenueRect::setCornerNW(double latitude, double longitude) {
+    setCorner(latitude, longitude, m_cornerNW);
+}
+
+/**
+ * setter
+  * @param latitude the corner's latitude
+ * @param longitude the corner's longitude
+ * @throws out_of_range exception if latitude or longitude is invalid
+ */
+void VenueRect::setCornerNE(double latitude, double longitude) {
+    setCorner(latitude, longitude, m_cornerNE);
 }
 
 /**
@@ -50,18 +62,58 @@ void VenueRect::setCornerB(double latitude, double longitude) {
  * @param longitude the corner's longitude
  * @throws out_of_range exception if latitude or longitude is invalid
  */
-void VenueRect::setCornerC(double latitude, double longitude) {
-    setCorner(latitude, longitude, cornerC);
+void VenueRect::setCornerSE(double latitude, double longitude) {
+    setCorner(latitude, longitude, m_cornerSE);
 }
 
 /**
- * setter
- * @param latitude the corner's latitude
- * @param longitude the corner's longitude
+ * Setter
+ * @param cornerA
+ * @param cornerB
+ * @param cornerC
+ * @param cornerD
+ */
+void VenueRect::setCorners(Coordinate cornerA, Coordinate cornerB, Coordinate cornerC, Coordinate cornerD) {
+
+    // sort getPoints
+    std::vector<Coordinate> corners {cornerA, cornerB, cornerC, cornerD};
+    DataStreamIterator<Coordinate> cornerIt (corners);
+    // Order the getPoints SW, NW, NE, SE
+    PositionParser::order(cornerIt);
+
+    m_cornerSW = corners[0];
+    m_cornerNW = corners[1];
+    m_cornerNE = corners[2];
+    m_cornerSE = corners[3];
+
+}
+
+/**
+ * Setter
+ * @param latitudeA
+ * @param longitudeA
+ * @param latitudeB
+ * @param longitudeB
+ * @param latitudeC
+ * @param longitudeC
+ * @param latitudeD
+ * @param longitudeD
  * @throws out_of_range exception if latitude or longitude is invalid
  */
-void VenueRect::setCornerD(double latitude, double longitude) {
-    setCorner(latitude, longitude, cornerD);
+void VenueRect::setCorners(double latitudeA, double longitudeA, double latitudeB, double longitudeB, double latitudeC,
+                           double longitudeC, double latitudeD, double longitudeD) {
+
+    Coordinate cornerA, cornerB, cornerC, cornerD;
+    try {
+        cornerA.set(latitudeA, longitudeA);
+        cornerB.set(latitudeB, longitudeB);
+        cornerC.set(latitudeC, longitudeC);
+        cornerD.set(latitudeD, longitudeD);
+    } catch (std::out_of_range &e) {
+        throw e;
+    }
+
+    setCorners(cornerA, cornerB, cornerC, cornerD);
 }
 
 /**
@@ -69,7 +121,7 @@ void VenueRect::setCornerD(double latitude, double longitude) {
  * @return the circumference in meters
  */
 double VenueRect::getCircumference() {
-    return cornerA.getDistanceTo(cornerB) + cornerB.getDistanceTo(cornerC) + cornerC.getDistanceTo(cornerD) + cornerD.getDistanceTo(cornerA);
+    return m_cornerSW.getDistanceTo(m_cornerNW) + m_cornerNW.getDistanceTo(m_cornerNE) + m_cornerNE.getDistanceTo(m_cornerSE) + m_cornerSE.getDistanceTo(m_cornerSW);
 }
 
 /**
@@ -88,7 +140,7 @@ bool VenueRect::isInside(Position position) {
     // do monte carlo test
     double hits = 0; // number of generated positions that are both within position perimeter and within venue perimeter
 
-    for (int i = 0; i < NO_OF_RANDOM_MC_VARIABLES; i++) {
+    for (int i = 0; i < NO_OF_MONTE_CARLO_SAMPLES; i++) {
 
         // Create random double generator that generates coordinates within a circle drawn around the position
         // where the radius is the accuracy.
@@ -118,7 +170,7 @@ bool VenueRect::isInside(Position position) {
     }
 
     // calculate probability of being inside and return true if probability is equal to or greater the constant value
-    if (hits / NO_OF_RANDOM_MC_VARIABLES >= IS_INSIDE_LIMIT)
+    if (hits / NO_OF_MONTE_CARLO_SAMPLES >= IS_INSIDE_LIMIT)
         return true;
 
     return false;
@@ -126,22 +178,22 @@ bool VenueRect::isInside(Position position) {
 
 /**
  * Check whether a coordinate is inside the venue
- * @param latitude latitude of the coordinate
- * @param longitude longitude of the coordinate
+ * @param latitude m_latitude of the coordinate
+ * @param longitude m_longitude of the coordinate
  * @return
  */
 bool VenueRect::isInside(double latitude, double longitude) {
 
-    // a point P is outside the bounds of a rectangle (the venue) with the corners ABCD if the sum of the areas of the triangles
+    // a point P is outside the bounds of a rectangle (the venue) with the getPoints ABCD if the sum of the areas of the triangles
     // PAB + PBC + PCD + PDA is greater than the area of the rectangle
     // to account for floating point errors, the venue's coordinates are moved about 1 cm apart to increase its area
 
     // add about a cm in the decimal GNSS coordinate system
     const double INCREASE_RECT_AREA =  0.0000001; // degrees
 
-    // venue area. The venue is projected on a 2d plane using coordinates in decimal degrees as positions of the corners.
+    // venue area. The venue is projected on a 2d plane using coordinates in decimal degrees as positions of the getPoints.
     // the area calculated is not real area, it is only used as a comparison to the area of the triangles
-    double venueArea = (cornerA.getEucDistanceTo(cornerB) + INCREASE_RECT_AREA) * (cornerB.getEucDistanceTo(cornerC) + INCREASE_RECT_AREA);
+    double venueArea = (m_cornerSW.getEucDistanceTo(m_cornerNW) + INCREASE_RECT_AREA) * (m_cornerNW.getEucDistanceTo(m_cornerNE) + INCREASE_RECT_AREA);
 
     // the point
     Coordinate p;
@@ -154,11 +206,11 @@ bool VenueRect::isInside(double latitude, double longitude) {
     }
 
     // area of triangles PAB, PBC, PCD, PDA
-    double trianglesArea = areaTriangle(p,cornerA, cornerB) + areaTriangle(p, cornerB, cornerC) + areaTriangle(p, cornerC, cornerD) +
-            areaTriangle(p, cornerD, cornerA);
+    double trianglesArea = areaTriangle(p, m_cornerSW, m_cornerNW) + areaTriangle(p, m_cornerNW, m_cornerNE) + areaTriangle(p, m_cornerNE, m_cornerSE) +
+                           areaTriangle(p, m_cornerSE, m_cornerSW);
 
     // if area of triangles is bigger than area of rectangle, the coordinate is outside
-    // std::cout << std::fixed << std::setprecision(10 )<< "Pos: ("<< latitude << ", " << longitude << ") Tri: " << trianglesArea << " Rec: " << venueArea << std::endl;
+    // std::cout << std::fixed << std::setprecision(10 )<< "Pos: ("<< m_latitude << ", " << m_longitude << ") Tri: " << trianglesArea << " Rec: " << venueArea << std::endl;
     if (trianglesArea > venueArea)
         return false;
 
@@ -185,8 +237,12 @@ double VenueRect::areaTriangle(Coordinate cA, Coordinate cB, Coordinate cC) {
 }
 
 std::vector<Coordinate> VenueRect::getCorners() const {
-    return std::vector<Coordinate> {cornerA, cornerB, cornerC, cornerD};
+    return std::vector<Coordinate> {m_cornerSW, m_cornerNW, m_cornerNE, m_cornerSE};
 }
+
+
+
+
 
 
 

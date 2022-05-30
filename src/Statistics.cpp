@@ -29,9 +29,9 @@ double Statistics::singleBayesian(double specificity, double sensitivity, double
 double Statistics::calcSensitivity(const VenueRect& venueRect, int margin, int iterations) {
     std::vector<Coordinate> corners = venueRect.getCorners();
     DataStreamIterator<Coordinate> cornerIt (corners);
-    // Order the corners SW, NW, NE, SE
+    // Order the getPoints SW, NW, NE, SE
     corners = PositionParser::order(cornerIt);
-    // Determine the distances between the SW corner and the other corners
+    // Determine the distances between the SW corner and the other getPoints
     double SW_NW = corners[0].getDistanceTo(corners[1]);
     double SW_NE = corners[0].getDistanceTo(corners[2]);
     double SW_SE = corners[0].getDistanceTo(corners[3]);
@@ -68,9 +68,9 @@ double Statistics::calcSensitivity(const VenueRect& venueRect, int margin, int i
 double Statistics::calcSpecificity(const VenueRect& venueRect, int margin, int iterations) {
     std::vector<Coordinate> corners = venueRect.getCorners();
     DataStreamIterator<Coordinate> cornerIt (corners);
-    // Order the corners SW, NW, NE, SE
+    // Order the getPoints SW, NW, NE, SE
     corners = PositionParser::order(cornerIt);
-    // Determine the distances between the SW corner and the other corners
+    // Determine the distances between the SW corner and the other getPoints
     double SW_NW = corners[0].getDistanceTo(corners[1]);
     double SW_NE = corners[0].getDistanceTo(corners[2]);
     double SW_SE = corners[0].getDistanceTo(corners[3]);

@@ -71,8 +71,8 @@ bool Position::isInside(Coordinate p) {
 
 /**
  * Check if a coordinate is within the perimeter of the accuracy. Includes values on the perimeter.
- * @param latitude latitude of the coordinate that is checked against this position
- * @param longitude longitude of the coordinate that is checked against this position
+ * @param latitude m_latitude of the coordinate that is checked against this position
+ * @param longitude m_longitude of the coordinate that is checked against this position
  * @return true if coordinate is within or on accuracy perimeter
  */
 bool Position::isInside(double latitude, double longitude) {
