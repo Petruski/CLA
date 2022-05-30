@@ -23,10 +23,6 @@ public:
     [[nodiscard]] double area() override { return m_height * m_width; }
     std::vector<Point> generatePointsInside(int amount) override;
 
-    [[nodiscard]] double getHeight() const { return m_height; }
-    [[nodiscard]] double getWidth() const { return m_width; }
-    [[nodiscard]] double getRotation() const { return m_rotation; }
-
 private:
     double m_height, m_width, m_rotation;
 

@@ -14,6 +14,7 @@
 #include "Rectangle.h"
 #include "Circle.h"
 #include "UtilityFunctions.h"
+#include "Point.h"
 
 int main(int argc, char *argv[]) {
 
@@ -94,7 +95,7 @@ int main(int argc, char *argv[]) {
     }
     // Initialize CLA
     CLA cla(cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat,
-            cornerC_lon, cornerD_lat, cornerD_lon, NO_OF_MONTE_CARLO_SAMPLES, isInsideLimit, fileName);
+            cornerC_lon, cornerD_lat, cornerD_lon, 10000, isInsideLimit, fileName);
     cla.startCLA();
     std::cout << "Filename is: " << fileName << std::endl;
     std::cout << "IsInsideLimit is: " << isInsideLimit << std::endl;
@@ -103,20 +104,41 @@ int main(int argc, char *argv[]) {
     std::cout << "Corner C: " << cornerC_lat << ", " << cornerC_lon << std::endl;
     std::cout << "Corner D: " << cornerD_lat << ", " << cornerD_lon << std::endl;
 
-*/
+
+
+    /**
+     * Get coordinates in geographic and cartesian plane
+     */
+    Coordinate aC, bC, cC, dC, marker;
+//    aC.set(45, 70);
+//    bC.set(45, 70.007);
+//    cC.set(45.004, 70.007);
+//    dC.set(45.004, 70);
+//    marker.set(44.998, 69.99);
+//    VenueRect venueRect(aC, bC, cC, dC);
+//    double distanceGeo = aC.getDistanceTo(marker);
+//    double bearingGeo = aC.getBearingTo(marker); // degrees
+//
+//    double height = aC.getDistanceTo(bC);
+//    double width = bC.getDistanceTo(cC);
+//    Rectangle rec(Point(0,0), height, width, 0);
+//    double markerX = distanceGeo * std::cos(utils::toRadians(bearingGeo));
+//    double markerY = distanceGeo * std::sin(utils::toRadians(bearingGeo));
+//
+//    std::vector<Point> recPoints = rec.getPoints();
+//    for (auto p: recPoints) {
+//        std::cout << "Corner: (" << p.getX() << "," << p.getY() << ")\n";
+//    }
+//    Point markerPoint(markerX,markerY);
+//    std::cout << "Marker: (" << markerPoint.getX() << "," << markerPoint.getY() << ")\n";
     /**
      * TESTING GEOMETRIC CLASSES
      */
-
+/*
     Point origin(2,2);
     Shape *rectangle = new Rectangle(origin, 5, 10, 45 * std::numbers::pi / 180);
-    Shape *rectangle2 = new Rectangle(origin, 5, 10, 45 * std::numbers::pi / 180);
 
     std::cout << "Origin: (" << rectangle->getOrigin().getX() << "," << rectangle->getOrigin().getY() << ")\n";
-    //std::cout << "Height: " << rectangle->getHeight() << std::endl;
-    //std::cout << "Width: " << rectangle->getWidth() << std::endl;
-    //std::cout << "Rotation in radians: " << rectangle.getRotation() << std::endl;
-    //std::cout << "Rotation in degrees: " << rectangle.getRotation() * 180 / std::numbers::pi << std::endl;
     std::cout << "Area: " << rectangle->area() << std::endl;
     std::cout << "Corners: ";
     std::vector<Point> corners = rectangle->getPoints();
@@ -136,7 +158,6 @@ int main(int argc, char *argv[]) {
 
     Point circleOrigin(5,10);
     Shape *circle = new Circle(circleOrigin, 5);
-    Shape *circle2 = new Circle(circleOrigin, 5);
     std::cout << "Circle Origin: (" << circle->getOrigin().getX() << "," << circle->getOrigin().getY() << ")\n";
     //std::cout << "Circle radius: " << circle.getRadius() << std::endl;
     std::cout << "Circle area: " << circle->area() << std::endl;
@@ -158,7 +179,6 @@ int main(int argc, char *argv[]) {
     Point triAdj(7,9);
     Point triOpp(1,1);
     Shape *triangle = new Triangle(triOrigin, triAdj, triOpp);
-    Shape *triangle2 = new Triangle(triOrigin, triAdj, triOpp);
     std::cout << "Tri Origin: (" << triangle->getOrigin().getX() << "," << triangle->getOrigin().getY() << ")\n";
     std::cout << "Tri area: " << triangle->area() << std::endl;
     generatedPoints = triangle->generatePointsInside(5);
@@ -172,7 +192,7 @@ int main(int argc, char *argv[]) {
     }
 
     for (int i = 0; i < 20; i++) {
-        std::cout << "Intersection area: " << circle->intersectionArea(triangle, NO_OF_MONTE_CARLO_SAMPLES) << std::endl;
+        std::cout << "Intersection area: " << circle->intersectionArea_approximated(triangle, NO_OF_MONTE_CARLO_SAMPLES) << std::endl;
     }
 
     std::cout << std::endl;
@@ -183,7 +203,7 @@ int main(int argc, char *argv[]) {
     } else {
         std::cout << " Test-point is outside" << std::endl;
     }
-
+*/
 
     /* ****************************************
      * TESTING COORDINATES/POSITION CLASS

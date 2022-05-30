@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Shape.h"
 
-double Shape::intersectionArea(Shape *shape, int samples) {
+double Shape::intersectionArea_approximated(Shape *shape, int samples) {
 
     // Generate points inside this shape
     std::vector<Point> pointsInside = generatePointsInside(samples);
@@ -18,11 +18,5 @@ double Shape::intersectionArea(Shape *shape, int samples) {
         }
     }
 
-    //std::cout << "Area: " << area() << " Hits: " << intersectionPoints << " samples: " << samples << " ";
     return area() * intersectionPoints / samples;
-}
-
-std::vector<Point> Shape::getPoints() {
-    std::vector<Point> v{m_origin};
-    return v;
 }

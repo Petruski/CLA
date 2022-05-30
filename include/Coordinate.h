@@ -9,6 +9,7 @@
 #define CLA_COORDINATE_H
 
 #include <numbers>
+#include "Point.h"
 
 class Coordinate {
 protected:
@@ -39,10 +40,6 @@ public:
     // real earth distance in meters
     [[nodiscard]] double getDistanceTo(Coordinate coordinate) const;
     [[nodiscard]] double getDistanceTo(double latitude, double longitude) const;
-
-    // Euclidean distance in decimal degrees
-    [[nodiscard]] double getEucDistanceTo(Coordinate coordinate) const;
-    [[nodiscard]] double getEucDistanceTo(double latitude, double longitude) const;
 
     bool operator==(const Coordinate& coordinate) const {
         return this->m_latitude == coordinate.m_latitude && this->m_longitude == coordinate.m_longitude;

@@ -15,8 +15,10 @@ public:
     virtual double area() = 0;
     Point getOrigin() { return m_origin; }
     virtual std::vector<Point> generatePointsInside(int amount) = 0;
-    double intersectionArea(Shape *shape, int samples);
-    virtual std::vector<Point> getPoints();
+    double intersectionArea_approximated(Shape *shape, int samples);
+    virtual std::vector<Point> getPoints() {return std::vector<Point> {m_origin};}
+
+    virtual ~Shape() = default;
 
 protected:
     Point m_origin;

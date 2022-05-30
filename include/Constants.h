@@ -15,7 +15,7 @@
 // filename for file containing position data
 const std::string DEFAULT_FILENAME = "positions.csv";
 
-// no of monte carlo samples, higher value means better accuracy of Monte Carlo but slower app
+// no of monte carlo samples, higher value means better m_accuracy of Monte Carlo but slower app
 const int NO_OF_MONTE_CARLO_SAMPLES = 100000;
 
 // How big part of the circle around a position must be inside a venue for the position to be considered to be inside

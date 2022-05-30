@@ -100,44 +100,6 @@ double Coordinate::getDistanceTo(double latitude, double longitude) const {
     return getDistanceTo(c);
 }
 
-/**
- * Calculates Euclidean distance between this and another coordinate, ie distance in a 2d-plane
- * @param coordinate The coordinate to calculate distance too
- * @return the distance in decimal degrees
- */
-double Coordinate::getEucDistanceTo(Coordinate coordinate) const {
-
-    double x1 = m_longitude;
-    double y1 = m_latitude;
-    double x2 = coordinate.getLongitude();
-    double y2 = coordinate.getLatitude();
-
-    // fix values to be able to calculate distances correctly
-    if (x1 < 0) x1 += 360;
-    if (x2 < 0) x2 += 360;
-
-    return sqrt(std::abs(pow((x2-x1),2) + pow((y2-y1),2)));
-}
-
-/**
- * Calculates Euclidean distance between this and another coordinate, ie distance in a 2d-plane
- * @param latitude m_latitude of the other coordinate
- * @param longitude m_longitude of the other coordinate
- * @return the distance in decimal degrees
- */
-double Coordinate::getEucDistanceTo(double latitude, double longitude) const {
-    Coordinate c;
-    try {
-        c.setLatitude(latitude);
-        c.setLongitude(longitude);
-    } catch (std::out_of_range &e) {
-        std::cout << e.what();
-        return 0.0;
-    }
-    return getEucDistanceTo(c);
-}
-
-
 double Coordinate::getBearingTo(Coordinate coordinate) const {
     double distance_y = coordinate.getLatitude() - this->getLatitude();
     double distance_x = std::cos(M_PI / 180 * this->getLatitude()) * (coordinate.getLongitude() - this->getLongitude());

@@ -31,6 +31,7 @@ public:
     double circleOuterSectionArea(Point circleCenter, int radius);
 
     bool isInside(Point point) override;
+    std::vector<Point> getPoints() override { return std::vector<Point> { m_origin, m_adjacent, m_opposite }; }
 
 private:
     double area(double x1, double y1, double x2, double y2, double x3, double y3);

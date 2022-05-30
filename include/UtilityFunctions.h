@@ -16,7 +16,6 @@ namespace utils {
     double toDegrees(double radians);
 
     double toDouble(char *c);
-
     int toInt(char *c);
 }
 

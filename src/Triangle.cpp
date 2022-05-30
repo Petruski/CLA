@@ -342,21 +342,6 @@ double Triangle::calculateOuterCircleSectionArea(const std::vector<std::tuple<Ed
 }
 
 bool Triangle::isInside(Point point) {
-    // a point P is outside the bounds of a triangle with the getPoints ABC if the sum of the areas of the triangles
-    // PAB + PBC + PAC is greater than the area of the rectangle
-    double original_area = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
-    double area_one = area(point.getX(), point.getY(), m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
-    double area_two = area(m_origin.getX(), m_origin.getY(), point.getX(), point.getY(), m_adjacent.getX(), m_adjacent.getY());
-    double area_three = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), point.getX(), point.getY());
-    /*
-    if (area_one + area_two + area_three == original_area) {
-        points.emplace_back(x, y);
-    }
-     */
-    if (utils::equal(area_one + area_two + area_three, original_area)) {
-        return true;
-    }
-    return false;
 
     // area of triangles PAB, PBC, PAC
     Triangle pab(point, m_origin, m_adjacent);
