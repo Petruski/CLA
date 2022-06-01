@@ -28,7 +28,7 @@ public:
     // get earth radius at this coordinate in meters
     [[nodiscard]] double getEarthRadius() const;
 
-    // Get bearing (angle) between two coordinates
+    // Get bearing (angle in degrees) between two coordinates
     [[nodiscard]] double getBearingTo(Coordinate coordinate) const;
 
     // add degrees to coordinate

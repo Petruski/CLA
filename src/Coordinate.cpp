@@ -101,9 +101,28 @@ double Coordinate::getDistanceTo(double latitude, double longitude) const {
 }
 
 double Coordinate::getBearingTo(Coordinate coordinate) const {
+
+    // ‘L’ be the longitude,
+    // ‘θ’ be latitude,
+    // ‘β‘ be Bearing.
+    // β = atan2(X,Y)
+    // X = cos θb * sin ∆L
+    // Y = cos θa * sin θb – sin θa * cos θb * cos ∆L
+    double lat_a = utils::toRadians(this->getLatitude());
+    double lon_a = utils::toRadians(this->getLongitude());
+    double lat_b = utils::toRadians(coordinate.getLatitude());
+    double lon_b = utils::toRadians(coordinate.getLongitude());
+    double delta_lon = lon_b - lon_a;
+    double x = std::cos(lat_b) * sin(delta_lon);
+    double y = std::cos(lat_a) * sin(lat_b) - sin(lat_a) * cos(lat_b) * cos(delta_lon);
+
+    return utils::toDegrees(std::atan2(x, y));
+
+    /*
     double distance_y = coordinate.getLatitude() - this->getLatitude();
     double distance_x = std::cos(M_PI / 180 * this->getLatitude()) * (coordinate.getLongitude() - this->getLongitude());
     return std::atan2(distance_y, distance_x) * 180 / M_PI;
+     */
 }
 
 /**
