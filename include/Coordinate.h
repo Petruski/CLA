@@ -34,9 +34,6 @@ public:
     // add degrees to coordinate
     void add(double latitude, double longitude);
 
-    // new coordinate given bearing and distance from another
-    [[nodiscard]] Coordinate newCoordinate(double bearing, double distance) const;
-
     // real earth distance in meters
     [[nodiscard]] double getDistanceTo(Coordinate coordinate) const;
     [[nodiscard]] double getDistanceTo(double latitude, double longitude) const;

@@ -168,31 +168,3 @@ void Coordinate::add(double latitude, double longitude) {
         m_longitude = 360 + m_longitude;
     }
 }
-
-/**
- * A terminal coordinate, ie produce a new coordinate from a origin coordinate given a bearing and a distance
- * @param bearing bearing in radians
- * @param distance distance in meters
- * @return
- */
-Coordinate Coordinate::newCoordinate(double bearing, double distance) const {
-    double lat1 = utils::toRadians(m_latitude);
-    double lon1 = utils::toRadians(m_longitude);
-    double radius = getEarthRadius();
-    double ad = distance / radius;
-
-    // lat2 = asin(sin lat1 * cos ad + cos lat1 * sin ad * cos bearing)
-    // lon2 = lon1 + atan2(sin bearing * sin ad * cos lat1, cos ad - sin lat1 * sin lat2)
-    double lat2 = asin(sin(lat1) * cos(ad) + cos(lat1) * sin(ad) * cos(bearing));
-    double lon2 = lon1 + atan2(sin(bearing) * sin(ad) * cos(lat1), cos(ad) - sin(lat1) * sin(lat2));
-
-    Coordinate newCoordinate;
-    newCoordinate.setLatitude(utils::toDegrees(lat2));
-    newCoordinate.setLongitude(utils::toDegrees(lon2));
-
-    return newCoordinate;
-}
-
-
-
-
