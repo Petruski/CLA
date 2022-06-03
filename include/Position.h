@@ -32,8 +32,8 @@ public:
     // check if coordinate is inside position perimeter where position coordinate is center
     // and position m_accuracy is radius, thus drawing a circle around the position which counts as perimeter
     // a coordinate on the perimeter counts as inside
-    bool isInside(Coordinate p);
-    bool isInside(double latitude, double longitude);
+   // bool isInside(Coordinate p);
+   // bool isInside(double latitude, double longitude);
 };
 
 

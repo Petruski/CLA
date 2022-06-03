@@ -25,7 +25,6 @@ public:
     [[nodiscard]] const Coordinate &getMapMarker() const;
     void setMapMarker(double latitude, double longitude);
 
-    virtual double getCircumference() = 0;
     [[nodiscard]] virtual std::vector<Coordinate> getCorners() const = 0;
 
     virtual  ~Venue() = default;

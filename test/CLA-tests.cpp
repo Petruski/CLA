@@ -4,6 +4,9 @@
 #include <iostream>
 #include "catch.hpp"
 #include "Coordinate.h"
+#include "Position.h"
+#include "Venue.h"
+#include "VenueRect.h"
 
 SCENARIO("Testing Coordinate Class") {
     GIVEN("Coordinate object") {
@@ -113,6 +116,94 @@ SCENARIO("Testing Coordinate Class") {
                     REQUIRE(c.getEarthRadius() <= 6378137.0);
                     REQUIRE(c.getEarthRadius() >= 6356752.0);
                 }
+            }
+        }
+    }
+}
+
+SCENARIO("Testing position class") {
+    GIVEN("A position") {
+        Position p;
+        WHEN(" using the default constructor") {
+            THEN("Time and accuracy should be 0") {
+                REQUIRE(p.getTime() == 0);
+                REQUIRE(p.getAccuracy() == 0);
+            }
+        } WHEN("the setters are used") {
+            int time = 1233564;
+            double accuracy = 12.3;
+            std::string provider = "satelliteX";
+            p.setTime(time);
+            p.setAccuracy(accuracy);
+            p.setProvider(provider);
+            THEN("the getters should return the same values") {
+                REQUIRE(p.getTime() == time);
+                REQUIRE(p.getAccuracy() == accuracy);
+                REQUIRE(p.getProvider() == provider);
+
+            }
+        }
+    }
+    GIVEN ("A position with parameters") {
+        WHEN("Data members are set using the parameters") {
+            int time = 12564;
+            double accuracy = 1.32;
+            std::string provider = "satelliteY";
+            Position p(accuracy, time, provider);
+            THEN("The getters should return the correct value") {
+                REQUIRE(p.getTime() == time);
+                REQUIRE(p.getAccuracy() == accuracy);
+                REQUIRE(p.getProvider() == provider);
+            }
+        }
+    }
+}
+
+SCENARIO("Testing VenueRect class") {
+    GIVEN("A venue") {
+        Coordinate a,b,c,d;
+        a.set(0,0);
+        b.set(1,0);
+        c.set(1,1);
+        d.set(0,1);
+        VenueRect v1(a, b, c, d);
+        VenueRect v2(b, c, d, a);
+        VenueRect v3(d, c, b, a);
+        VenueRect v4(d, a, d, a);
+        WHEN("The data members are set using the setters") {
+            std::string name = "shop";
+            double marker_lat = 0.5;
+            double marker_lon = 0.5;
+            Coordinate marker;
+            marker.set(marker_lat, marker_lon);
+            v1.setName(name);
+            v1.setMapMarker(marker_lat, marker_lon);
+            THEN("The getters should return the same value") {
+                REQUIRE(v1.getName() == name);
+                REQUIRE(v1.getMapMarker() == marker);
+            }
+        }AND_WHEN("Returning the corners") {
+            std::vector<Coordinate> c1 = v1.getCorners();
+            std::vector<Coordinate> c2 = v2.getCorners();
+            std::vector<Coordinate> c3 = v3.getCorners();
+            std::vector<Coordinate> c4 = v4.getCorners();
+            THEN("The corners should be returned sorted") {
+                REQUIRE(c1[0] == a);
+                REQUIRE(c1[1] == b);
+                REQUIRE(c1[2] == c);
+                REQUIRE(c1[3] == d);
+                REQUIRE(c2[0] == a);
+                REQUIRE(c2[1] == b);
+                REQUIRE(c2[2] == c);
+                REQUIRE(c2[3] == d);
+                REQUIRE(c3[0] == a);
+                REQUIRE(c3[1] == b);
+                REQUIRE(c3[2] == c);
+                REQUIRE(c3[3] == d);
+                REQUIRE(c4[0] == a);
+                REQUIRE(c4[1] == a);
+                REQUIRE(c4[2] == d);
+                REQUIRE(c4[3] == d);;
             }
         }
     }

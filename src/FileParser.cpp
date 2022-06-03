@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <utility>
+#include <algorithm>
 #include "../include/FileParser.h"
 
 /**
