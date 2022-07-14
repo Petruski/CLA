@@ -7,6 +7,7 @@
 #include "Position.h"
 #include "Venue.h"
 #include "VenueRect.h"
+#include "Circle.h"
 
 SCENARIO("Testing Coordinate Class") {
     GIVEN("Coordinate object") {
@@ -208,3 +209,68 @@ SCENARIO("Testing VenueRect class") {
         }
     }
 }
+
+SCENARIO("Testing Circle class") {
+    GIVEN("A Circle with data being set through the constructor") {
+        Circle c(Point(5, 7), 12);
+        THEN("the radius should be correct") {
+            REQUIRE(c.getRadius() == 12);
+        }
+        THEN("the area should be correct") {
+            REQUIRE(c.area() == std::numbers::pi * 12 * 12);
+        }
+        THEN("The returned origin should be correct") {
+            REQUIRE(c.getOrigin() == Point(5,7));
+        }
+        THEN("the returned points should be a vector with one element, the origin point") {
+            std::vector<Point> points = c.getPoints();
+            REQUIRE(points.size() == 1);
+            REQUIRE(points[0] == Point(5,7));
+        }
+        WHEN("Generating points inside") {
+            std::vector<Point> points = c.generatePointsInside(100);
+            THEN("the correct amount of points should be generated") {
+                REQUIRE(points.size() == 100);
+            }
+            THEN("all points should be inside") {
+                for (auto point: points) {
+                    REQUIRE(c.isInside(point));
+                }
+            }
+        }AND_WHEN("given some points inside the circle, ") {
+            Point p1(0, 0);
+            Point p2(5, 7);
+            Point p3(5, 18.9);
+            Point p4(-6.9, 7);
+            THEN("The points should be reported as inside") {
+                REQUIRE(c.isInside(p1));
+                REQUIRE(c.isInside(p2));
+                REQUIRE(c.isInside(p3));
+                REQUIRE(c.isInside(p4));
+            }
+        }
+        AND_WHEN("given some points outside the circle, ") {
+            Point p1(17, 18);
+            Point p2(5, 19);
+            Point p3(-7, 7);
+            THEN("The points should be reported as outside") {
+                REQUIRE_FALSE(c.isInside(p1));
+                REQUIRE_FALSE(c.isInside(p2));
+                REQUIRE_FALSE(c.isInside(p3));
+            }
+        }
+    }
+}
+/**
+* @TODO make tests for:
+ * CLA
+ * DataStreamIterator
+ * Edge
+ * FileParser
+ * PositionParser
+ * Point
+ * Rectangle
+ * Statistics
+ * Triangle
+ * UtilityFunctions
+*/
