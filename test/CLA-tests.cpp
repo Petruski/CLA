@@ -10,6 +10,7 @@
 #include "Circle.h"
 #include "Rectangle.h"
 #include "UtilityFunctions.h"
+#include "Triangle.h"
 
 SCENARIO("Testing Coordinate Class") {
     GIVEN("Coordinate object") {
@@ -317,6 +318,67 @@ SCENARIO("Testing Rectangle class") {
         }
     }
 }
+
+SCENARIO("Testing Triangle class") {
+    GIVEN("A triangle with data being set through the constructor") {
+        Triangle t(Point(5, 7), Point(3, 4), Point(6, 5));
+        THEN("the area should be correct") {
+            REQUIRE(t.area() == 3.5);
+        }
+        THEN("The returned origin should be correct") {
+            REQUIRE(t.getOrigin() == Point(5,7));
+        }
+        THEN("the returned points should be a vector with 3 elements with the correct values") {
+            std::vector<Point> points = t.getPoints();
+            REQUIRE(points.size() == 3);
+
+            REQUIRE(points[0] == Point(5,7));
+            REQUIRE(points[1] == Point(3,4));
+            REQUIRE(points[2] == Point(6,5));
+        }
+        AND_WHEN("Generating points outside") {
+            std::vector<Point> points = t.generatePointsOutside(100, 4);
+            THEN("the correct amount of points should be generated") {
+                REQUIRE(points.size() == 100);
+            }
+            THEN("all points should be outside") {
+                for (auto point: points) {
+                    REQUIRE_FALSE(t.isInside(point));
+                }
+            }
+        }AND_WHEN("Generating points inside") {
+            std::vector<Point> points = t.generatePointsInside(100);
+            THEN("the correct amount of points should be generated") {
+                REQUIRE(points.size() == 100);
+            }
+            THEN("all points should be inside") {
+                for (auto point: points) {
+                    REQUIRE(t.isInside(point));
+                }
+            }
+        }
+        AND_WHEN("given some points inside the triangle") {
+            Point p1(5, 7);
+            Point p2(4, 5);
+            Point p3(5, 6);
+            THEN("The points should be reported as inside") {
+                REQUIRE(t.isInside(p1));
+                REQUIRE(t.isInside(p2));
+                REQUIRE(t.isInside(p3));
+            }
+        }
+        AND_WHEN("given some points outside the triangle, ") {
+            Point p1(5, 7.1);
+            Point p2(2, 6);
+            Point p3(5, 8);
+            THEN("The points should be reported as outside") {
+                REQUIRE_FALSE(t.isInside(p1));
+                REQUIRE_FALSE(t.isInside(p2));
+                REQUIRE_FALSE(t.isInside(p3));
+            }
+        }
+    }
+}
 /**
 * @TODO make tests for:
  * CLA
@@ -326,6 +388,6 @@ SCENARIO("Testing Rectangle class") {
  * PositionParser
  * Point
  * Statistics
- * Triangle
+ * Triangle::circleOuterSectionArea
  * UtilityFunctions
 */
