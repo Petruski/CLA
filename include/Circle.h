@@ -14,7 +14,7 @@ class Circle: public Shape {
 public:
     Circle(Point center, double radius): m_radius(radius) { m_origin = center; }
 
-    bool isInside(Point point) override { return m_origin.distanceTo(point) < m_radius; }
+    bool isInside(Point point) override { return m_origin.distanceTo(point) <= m_radius; } // on the perimeter returns true
     double area() override { return std::numbers::pi * m_radius * m_radius; }
     std::vector<Point> generatePointsInside(int amount) override;
     [[nodiscard]] double getRadius() const { return m_radius; }

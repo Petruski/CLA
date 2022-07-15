@@ -8,6 +8,8 @@
 #include "Venue.h"
 #include "VenueRect.h"
 #include "Circle.h"
+#include "Rectangle.h"
+#include "UtilityFunctions.h"
 
 SCENARIO("Testing Coordinate Class") {
     GIVEN("Coordinate object") {
@@ -240,8 +242,8 @@ SCENARIO("Testing Circle class") {
         }AND_WHEN("given some points inside the circle, ") {
             Point p1(0, 0);
             Point p2(5, 7);
-            Point p3(5, 18.9);
-            Point p4(-6.9, 7);
+            Point p3(5, 19);
+            Point p4(-7, 7);
             THEN("The points should be reported as inside") {
                 REQUIRE(c.isInside(p1));
                 REQUIRE(c.isInside(p2));
@@ -251,12 +253,66 @@ SCENARIO("Testing Circle class") {
         }
         AND_WHEN("given some points outside the circle, ") {
             Point p1(17, 18);
-            Point p2(5, 19);
-            Point p3(-7, 7);
+            Point p2(5, 19.1);
+            Point p3(-7.1, 7);
             THEN("The points should be reported as outside") {
                 REQUIRE_FALSE(c.isInside(p1));
                 REQUIRE_FALSE(c.isInside(p2));
                 REQUIRE_FALSE(c.isInside(p3));
+            }
+        }
+    }
+}
+
+SCENARIO("Testing Rectangle class") {
+    GIVEN("A rectangle with data being set through the constructor") {
+        Rectangle r(Point(1, 4), 3, 2, std::numbers::pi / 4);
+        THEN("the area should be correct") {
+            REQUIRE(r.area() == 6);
+        }
+        THEN("The returned origin should be correct") {
+            REQUIRE(r.getOrigin() == Point(1,4));
+        }
+        THEN("the returned points should be a vector with 4 elements with the correct values") {
+            std::vector<Point> points = r.getPoints();
+            REQUIRE(points.size() == 4);
+
+            REQUIRE(points[0] == Point(1,4));
+            REQUIRE(points[1].getX() == Approx(-1.1213203436));
+            REQUIRE(points[1].getY() == Approx(6.1213203436));
+            REQUIRE(points[2].getX() == Approx(0.2928932188));
+            REQUIRE(points[2].getY() == Approx(7.5355339059));
+            REQUIRE(points[3].getX() == Approx(2.4142135624));
+            REQUIRE(points[3].getY() == Approx(5.4142135624));
+        }
+        AND_WHEN("Generating points inside") {
+            std::vector<Point> points = r.generatePointsInside(100);
+            THEN("the correct amount of points should be generated") {
+                REQUIRE(points.size() == 100);
+            }
+            THEN("all points should be inside") {
+                for (auto point: points) {
+                    REQUIRE(r.isInside(point));
+                }
+            }
+        }AND_WHEN("given some points inside the rectangle, ") {
+            Point p1(1, 4);
+            Point p2(1.5, 6);
+            Point p3(-0.5, 6);
+            THEN("The points should be reported as inside") {
+                REQUIRE(r.isInside(p1));
+                REQUIRE(r.isInside(p2));
+                REQUIRE(r.isInside(p3));
+            }
+        }
+        AND_WHEN("given some points outside the rectangle, ") {
+            Point p1(0.9, 4);
+            Point p2(-2, 6);
+            Point p3(1, -1);
+            THEN("The points should be reported as outside") {
+                REQUIRE_FALSE(r.isInside(p1));
+                REQUIRE_FALSE(r.isInside(p2));
+                REQUIRE_FALSE(r.isInside(p3));
             }
         }
     }
@@ -269,7 +325,6 @@ SCENARIO("Testing Circle class") {
  * FileParser
  * PositionParser
  * Point
- * Rectangle
  * Statistics
  * Triangle
  * UtilityFunctions
