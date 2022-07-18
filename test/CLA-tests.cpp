@@ -12,6 +12,56 @@
 #include "UtilityFunctions.h"
 #include "Triangle.h"
 
+SCENARIO("Testing Point class") {
+    GIVEN("A Point with data being set through the constructor") {
+        double x = 12;
+        double y = -23;
+        Point p1(x, y);
+        THEN("the point should have x and y set correctly") {
+            REQUIRE(p1.getX() == x);
+            REQUIRE(p1.getY() == y);
+        }
+    }
+    GIVEN("A Point with default values from constructor") {
+        Point p1;
+        THEN("The data members should have the correct values") {
+            REQUIRE(p1.getX() == 0.0);
+            REQUIRE(p1.getY() == 0.0);
+        }
+        WHEN("Setting the data members using setters") {
+            double x = -0.7;
+            double y = 7.2;
+            p1.setX(x);
+            p1.setY(y);
+            THEN("The data members should have the correct values") {
+                REQUIRE(p1.getX() == x);
+                REQUIRE(p1.getY() == y);
+            }
+        }
+    }
+    GIVEN("Two identical points") {
+        double x = 0.8;
+        double y = -0.91;
+        Point p1(x,y);
+        Point p2(x,y);
+        THEN("The points should be equal") {
+            REQUIRE(p1 == p2);
+        }
+    }
+    GIVEN("Two different points") {
+        Point p1(234.12, 8.232);
+        Point p2(0, -9);
+
+        THEN("They should not be equal") {
+            REQUIRE_FALSE(p1 == p2);
+        }
+        THEN("The distance between them should be correct") {
+            REQUIRE(p1.distanceTo(p2) == Approx(234.75330929297));
+        }
+    }
+}
+
+
 SCENARIO("Testing Coordinate Class") {
     GIVEN("Coordinate object") {
         Coordinate c;
