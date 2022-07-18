@@ -12,6 +12,57 @@
 #include "UtilityFunctions.h"
 #include "Triangle.h"
 
+SCENARIO(" Testing utility functions") {
+    GIVEN("Two doubles that are almost equal") {
+        double a = 23.999999991;
+        double b = 23.999999992;
+        WHEN("They aren't equal") {
+            REQUIRE_FALSE(a == b);
+            THEN("The equal function should still report them as equak") {
+                REQUIRE(utils::equal(a, b));
+            }
+        }
+    }
+    GIVEN("Some angles in degrees") {
+        std::vector<double> degrees {-45, 0, 180, 360, 720, 3456.98};
+        WHEN("Converting them to radians") {
+            std::vector<double> radians;
+            std::for_each(degrees.begin(), degrees.end(), [&radians](double a) { radians.push_back(utils::toRadians(a)); });
+            THEN("The values should be correct") {
+                for(int i = 0; i < radians.size(); i++) {
+                    REQUIRE(radians[i] == degrees[i] * std::numbers::pi / 180);
+                }
+            }
+        }
+    }
+    GIVEN("Some angles in radians") {
+        std::vector<double> radians {-1.23, 0, 1, 3.23, std::numbers::pi, 234.2};
+        WHEN("Converting them to degrees") {
+            std::vector<double> degrees;
+            std::for_each(radians.begin(), radians.end(), [&degrees](double a) { degrees.push_back(utils::toDegrees(a)); });
+            THEN("The values should be correct") {
+                for(int i = 0; i < degrees.size(); i++) {
+                    REQUIRE(degrees[i] == radians[i] * 180 / std::numbers::pi);
+                }
+            }
+        }
+    }
+    GIVEN("A char array value that can be converted to a number") {
+        char s[] = "12.3";
+        THEN("The conversion is successful") {
+            REQUIRE(utils::toDouble(s) == 12.3);
+            REQUIRE(utils::toInt(s) == 12);
+        }
+    }
+    GIVEN("A char array value that can not be converted to a number") {
+        char s[] = "x12.3";
+        THEN("The conversion throws an error") {
+            REQUIRE_THROWS_AS(utils::toDouble(s), std::runtime_error);
+            REQUIRE_THROWS_AS(utils::toInt(s), std::runtime_error);
+        }
+    }
+
+}
 SCENARIO("Testing Point class") {
     GIVEN("A Point with data being set through the constructor") {
         double x = 12;
@@ -436,7 +487,6 @@ SCENARIO("Testing Triangle class") {
  * Edge
  * FileParser
  * PositionParser
- * Point
  * Statistics
  * Triangle::circleOuterSectionArea
  * UtilityFunctions
