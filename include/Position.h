@@ -29,6 +29,24 @@ public:
     [[nodiscard]] const std::string &getProvider() const;
     void setProvider(const std::string &provider);
 
+    bool operator==(const Position& position) const {
+
+        bool sameLongitude = false;
+        if (this->m_longitude == 180 && position.m_longitude == -180) {
+            sameLongitude = true;
+        } else if (this->m_longitude == -180 && position.m_longitude == 180) {
+            sameLongitude = true;
+        } else if (this->m_longitude == position.m_longitude) {
+            sameLongitude = true;
+        }
+
+        return this->m_latitude == position.m_latitude &&
+        sameLongitude &&
+        this->m_accuracy == position.m_accuracy &&
+        this->m_time == position.m_time &&
+        this->m_provider == position.m_provider;
+    }
+
     // check if coordinate is inside position perimeter where position coordinate is center
     // and position m_accuracy is radius, thus drawing a circle around the position which counts as perimeter
     // a coordinate on the perimeter counts as inside

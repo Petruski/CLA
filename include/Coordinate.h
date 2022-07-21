@@ -39,7 +39,15 @@ public:
     [[nodiscard]] double getDistanceTo(double latitude, double longitude) const;
 
     bool operator==(const Coordinate& coordinate) const {
-        return this->m_latitude == coordinate.m_latitude && this->m_longitude == coordinate.m_longitude;
+        bool sameLongitude = false;
+        if (this->m_longitude == 180 && coordinate.m_longitude == -180) {
+            sameLongitude = true;
+        } else if (this->m_longitude == -180 && coordinate.m_longitude == 180) {
+            sameLongitude = true;
+        } else if (this->m_longitude == coordinate.m_longitude) {
+            sameLongitude = true;
+        }
+        return this->m_latitude == coordinate.m_latitude && sameLongitude;
     }
 };
 

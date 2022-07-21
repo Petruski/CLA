@@ -12,6 +12,7 @@
 #include "UtilityFunctions.h"
 #include "Triangle.h"
 #include "DataStreamIterator.hpp"
+#include "PositionParser.h"
 
 SCENARIO(" Testing utility functions") {
     GIVEN("Two doubles that are almost equal") {
@@ -235,7 +236,8 @@ SCENARIO("Testing Coordinate Class") {
 
             }
         }
-    }GIVEN("A a coordinate with a latitude") {
+    }
+    GIVEN("A a coordinate with a latitude") {
         Coordinate c;
 
         WHEN("calculating radius") {
@@ -251,6 +253,46 @@ SCENARIO("Testing Coordinate Class") {
                     c.setLatitude(i);
                     REQUIRE(c.getEarthRadius() <= 6378137.0);
                     REQUIRE(c.getEarthRadius() >= 6356752.0);
+                }
+            }
+        }
+    }
+    GIVEN("Two identical coordinates") {
+        Coordinate c1, c2;
+        double lat = 12.34;
+        double lon = 34;
+        c1.set(lat, lon);
+        c2.set(lat, lon);
+        THEN("They should be equal") {
+            REQUIRE(c1 == c2);
+            WHEN("Changing one coordinate") {
+               c2.add(1, -5);
+               THEN("They should not be equal") {
+                   REQUIRE_FALSE(c1 == c2);
+               }
+            }
+        }
+    }
+    GIVEN("Two identical coordinates edge examples") {
+        Coordinate c1, c2;
+        double lat1 = 90;
+        double lon1 = -180;
+        double lat2 = 90;
+        double lon2 = 180;
+        c1.set(lat1, lon1);
+        c2.set(lat2, lon2);
+        THEN("They should be equal") {
+            REQUIRE(c1 == c2);
+            WHEN("Changing one coordinate") {
+                c2.add(0, -1);
+                THEN("They should not be equal") {
+                    REQUIRE_FALSE(c1 == c2);
+                }
+                AND_WHEN("Changing back") {
+                    c2.add(0, 1);
+                    THEN("They should be equal again") {
+                        REQUIRE(c1 == c2);
+                    }
                 }
             }
         }
@@ -290,6 +332,65 @@ SCENARIO("Testing position class") {
                 REQUIRE(p.getTime() == time);
                 REQUIRE(p.getAccuracy() == accuracy);
                 REQUIRE(p.getProvider() == provider);
+            }
+        }
+    }
+    GIVEN("Two identical positions") {
+        double lat = 12.34;
+        double lon = 34;
+        Position p1(12, 123, "GPS");
+        Position p2(12, 123, "GPS");
+        p1.set(lat, lon);
+        p2.set(lat, lon);
+        THEN("They should be equal") {
+            REQUIRE(p1 == p2);
+            WHEN("Changing one coordinate") {
+                p2.add(1, -5);
+                THEN("They should not be equal") {
+                    REQUIRE_FALSE(p1 == p2);
+                }
+            }
+            WHEN("Changing one coordinate") {
+                p2.setAccuracy(1);
+                THEN("They should not be equal") {
+                    REQUIRE_FALSE(p1 == p2);
+                }
+            }
+            WHEN("Changing one coordinate") {
+                p1.setProvider("x");
+                THEN("They should not be equal") {
+                    REQUIRE_FALSE(p1 == p2);
+                }
+            }
+            WHEN("Changing one coordinate") {
+                p2.setTime(1);
+                THEN("They should not be equal") {
+                    REQUIRE_FALSE(p1 == p2);
+                }
+            }
+        }
+    }
+    GIVEN("Two identical coordinates edge examples") {
+        Coordinate c1, c2;
+        double lat1 = 90;
+        double lon1 = -180;
+        double lat2 = 90;
+        double lon2 = 180;
+        c1.set(lat1, lon1);
+        c2.set(lat2, lon2);
+        THEN("They should be equal") {
+            REQUIRE(c1 == c2);
+            WHEN("Changing one coordinate") {
+                c2.add(0, -1);
+                THEN("They should not be equal") {
+                    REQUIRE_FALSE(c1 == c2);
+                }
+                AND_WHEN("Changing back") {
+                    c2.add(0, 1);
+                    THEN("They should be equal again") {
+                        REQUIRE(c1 == c2);
+                    }
+                }
             }
         }
     }
@@ -548,6 +649,35 @@ SCENARIO("Testing DataStreamIterator") {
                 }
             }
 
+        }
+    }
+}
+
+SCENARIO("Testing PositionParser with positions") {
+    GIVEN("A DataStreamIterator and a container with positions") {
+
+        Position a(10, 12, "GPS");
+        a.set(12.45, -67.12342);
+
+        Position b(11, 121234, "GPS");
+        a.set(-12, 0);
+
+        Position c(12, 122998, "GPS");
+        a.set(-56, 22);
+
+        Position d(13, 1, "GLOSNASS");
+
+        std::vector<Position> p {a, b, c, d};
+
+        DataStreamIterator it(p);
+
+        WHEN("Filtering the positions") {
+            PositionParser::filter(it, 11);
+            THEN("The correct positions should be filtered out") {
+                REQUIRE(it.next() == a);
+                REQUIRE(it.next() == b);
+                REQUIRE(it.hasNext() == false);
+            }
         }
     }
 }
