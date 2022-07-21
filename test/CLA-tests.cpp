@@ -112,6 +112,36 @@ SCENARIO("Testing Point class") {
     }
 }
 
+SCENARIO("Testing Edge class") {
+    GIVEN("An Edge object") {
+        double x1 = -1;
+        double y1 = 12.56;
+        double x2 = -123.765;
+        double y2 = 192837.34;
+        Point p1(x1, y1);
+        Point p2(x2, y2);
+        Edge e(p1, p2);
+        THEN("The getters should return the points") {
+            REQUIRE(e.getA() == p1);
+            REQUIRE(e.getB() == p2);
+        }
+        THEN("The distance between the points should be correct") {
+            REQUIRE(e.distance() == Approx(192824.81908015));
+        }
+        WHEN("Given another edge with the same points") {
+            Edge e2(p1, p2);
+            THEN("The edges should be equal") {
+                REQUIRE(e == e2);
+            }
+        }
+        WHEN("Given another edge with the other points") {
+            Edge e2(p1, Point(0, 45));
+            THEN("The edges should not be equal") {
+                REQUIRE_FALSE(e == e2);
+            }
+        }
+    }
+}
 
 SCENARIO("Testing Coordinate Class") {
     GIVEN("Coordinate object") {
