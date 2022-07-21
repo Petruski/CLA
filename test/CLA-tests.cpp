@@ -660,14 +660,14 @@ SCENARIO("Testing PositionParser with positions") {
         a.set(12.45, -67.12342);
 
         Position b(11, 121234, "GPS");
-        a.set(-12, 0);
+        b.set(-12, 0);
 
         Position c(12, 122998, "GPS");
-        a.set(-56, 22);
+        c.set(-56, 22);
 
         Position d(13, 1, "GLOSNASS");
 
-        std::vector<Position> p {a, b, c, d};
+        std::vector<Position> p {a, d, c, b};
 
         DataStreamIterator it(p);
 
@@ -679,14 +679,46 @@ SCENARIO("Testing PositionParser with positions") {
                 REQUIRE(it.hasNext() == false);
             }
         }
+        WHEN("Calculating average") {
+            Position average = PositionParser::average(it, 10);
+            THEN("The result should be correct") {
+                REQUIRE(average.getTime() == 121234);
+                REQUIRE(average.getAccuracy() == 11.5);
+                REQUIRE(average.getProvider() == "GPS");
+                REQUIRE(average.getLatitude() == Approx(-13.8875));
+                REQUIRE(average.getLongitude() == Approx(-11.280855));
+            }
+        }
+    }
+}
+
+SCENARIO("Testing PositionParser with coordinates") {
+    GIVEN("A DataStreamIterator and a container with coordinates") {
+
+        Coordinate a, b, c, d;
+        a.set(-12, 0);
+        b.set(-56, 22);
+        c.set(56, 22);
+
+        std::vector<Coordinate> vec {a, b, c, d};
+
+        DataStreamIterator it(vec);
+
+        WHEN("Ordering the coordinates") {
+            std::vector<Coordinate> orderedVec = PositionParser::order(it);
+            THEN("The coordinates should be ordered correctly") {
+                REQUIRE(orderedVec[0] == a);
+                REQUIRE(orderedVec[1] == d);
+                REQUIRE(orderedVec[2] == c);
+                REQUIRE(orderedVec[3] == b);
+            }
+        }
     }
 }
 /**
 * @TODO make tests for:
  * CLA
  * FileParser
- * PositionParser
  * Statistics
  * Triangle::circleOuterSectionArea
- * UtilityFunctions
 */
