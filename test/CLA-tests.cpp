@@ -11,6 +11,7 @@
 #include "Rectangle.h"
 #include "UtilityFunctions.h"
 #include "Triangle.h"
+#include "DataStreamIterator.hpp"
 
 SCENARIO(" Testing utility functions") {
     GIVEN("Two doubles that are almost equal") {
@@ -510,11 +511,49 @@ SCENARIO("Testing Triangle class") {
         }
     }
 }
+
+SCENARIO("Testing DataStreamIterator") {
+    GIVEN("A DataStreamIterator and a container") {
+        std::vector<int> vec {1, 3, 5, 7, 9, 11, 13};
+        DataStreamIterator it(vec);
+        THEN("hasNext should be true") {
+            REQUIRE(it.hasNext() == true);
+        }
+        WHEN("iterating the container") {
+            THEN("the correct values should be returned"){
+                    REQUIRE(it.next() == 1);
+                    REQUIRE(it.next() == 3);
+                    REQUIRE(it.next() == 5);
+                AND_WHEN("removing the last returned value before continuing iterating, has next should be correct and "
+                         "the correct values should be returned") {
+                    it.remove();
+                    REQUIRE(it.hasNext() == true);
+                    REQUIRE(it.next() == 7);
+                    REQUIRE(it.next() == 9);
+                    REQUIRE(it.next() == 11);
+                    REQUIRE(it.next() == 13);
+                    REQUIRE(it.hasNext() == false);
+                    AND_WHEN("Resetting the container, the iterator should be pointing to the first element. When "
+                             "iterating, the correct values should be returned. The removed value should be removed") {
+                        it.reset();
+                        REQUIRE(it.hasNext() == true);
+                        REQUIRE(it.next() == 1);
+                        REQUIRE(it.next() == 3);
+                        REQUIRE(it.next() == 7);
+                        REQUIRE(it.next() == 9);
+                        REQUIRE(it.next() == 11);
+                        REQUIRE(it.next() == 13);
+                        REQUIRE(it.hasNext() == false);
+                    }
+                }
+            }
+
+        }
+    }
+}
 /**
 * @TODO make tests for:
  * CLA
- * DataStreamIterator
- * Edge
  * FileParser
  * PositionParser
  * Statistics
