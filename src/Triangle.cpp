@@ -41,13 +41,13 @@ std::vector<Point> Triangle::generatePointsOutside(int amount, int distance) {
         double x = dis(gen) * m_adjacent.getX() + dis(gen) * m_opposite.getX();
         double y = dis(gen) * m_adjacent.getY() + dis(gen) * m_opposite.getY();
         // Check if the point is inside the interior of the triangle by creating three triangles from this point
-        // Compare the area of those triangles to the original triangle. If they equal, it is inside.
+        // Compare the area of those triangles to the original triangle. If it is not equal it is outside
         double original_area = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
         double area_one = area(x, y, m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
         double area_two = area(m_origin.getX(), m_origin.getY(), x, y, m_adjacent.getX(), m_adjacent.getY());
         double area_three = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), x, y);
-        if (area_one + area_two + area_three == original_area) {
-            points.emplace_back(x - distance, y - distance);
+        if (area_one + area_two + area_three != original_area) {
+            points.emplace_back(x, y);
         }
     }
     return points;
@@ -101,7 +101,6 @@ double Triangle::circleOuterSectionArea(Point circleCenter, int radius) {
     double origin_to_opposite_y_intercept = m_origin.getY() - (origin_to_opposite_slope * m_origin.getX());
     double origin_to_adjacent_y_intercept = m_origin.getY() - (origin_to_adjacent_slope * m_origin.getX());
     double opposite_to_adjacent_y_intercept = m_opposite.getY() - (opposite_to_adjacent_slope * m_opposite.getX());
-
     /**
     * Define the equation of the circle where x^2 + y^2 = a^2 where a is the radius
     * Solve the circleLineIntersectionQuadratic equation for each of the triangle edges
@@ -165,9 +164,9 @@ double Triangle::circleLineIntersectionQuadratic(double slope, double intercept,
     return (-b + (flip * std::sqrt(std::pow(b, 2) - 4 * a * c))) / (2 * a);
 }
 
-void
-Triangle::addIntersectionPoint(std::vector<std::tuple<Edge, Point>> &points, Point a, Point b, double slope, double yIntercept, double xValue, double min_x,
-                               double min_y, double max_x, double max_y) {
+void Triangle::addIntersectionPoint(std::vector<std::tuple<Edge, Point>> &points, Point a, Point b,
+                                    double slope, double yIntercept, double xValue, double min_x,
+                                    double min_y, double max_x, double max_y) {
     if (min_x <= xValue && xValue <= max_x) {
         double y = slope * xValue + yIntercept;
         if (min_y <= y && y <= max_y) {
