@@ -24,7 +24,12 @@ void CLA::startCLA() {
 
     // Filter the positions -- TODO average potentially
     PositionParser::filter(iterator, m_limit);
-
+    Position emptyPos;
+    Position position;
+    std::vector<Position> averagedPositions;
+    while (emptyPos != (position = PositionParser::average(iterator, 60))) {
+        averagedPositions.push_back(position);
+    }
     // Set up variables for statistical analysis
     int positiveResults = 0;
     int negativeResults = 0;
@@ -32,7 +37,7 @@ void CLA::startCLA() {
     double sensitivity;
 
     // Categorize each position as inside or outside
-    for (const Position& p : positions) {
+    for (const Position& p : averagedPositions) {
         if (venueRect.isInside(p)) {
             positiveResults++;
         } else {

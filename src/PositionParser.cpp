@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <cmath>
 #include "PositionParser.h"
 
 /**
@@ -25,25 +26,41 @@ void PositionParser::filter(DataStreamIterator<Position> &iterator, double aFilt
  * @param amount
  * @return Averaged Position - Naive averaging at the moment
  */
-Position PositionParser::average(DataStreamIterator<Position> &iterator, int amount) {
+Position PositionParser::average(DataStreamIterator<Position> &iterator, int seconds) {
     double latitudeSum = 0;
     double longitudeSum = 0;
     double accuracySum = 0;
     std::string lastProvider;
-    long lastTime = 0;
     int counter = 0;
-    for (int i = 1; i <= amount; i++) {
+    long timePeriod = 0;
+    long lastTime = 0;
+    long currentTime = 0;
+    while (timePeriod < seconds) {
         if (iterator.hasNext()) {
             Position current = iterator.next();
             latitudeSum += current.getLatitude();
             longitudeSum += current.getLongitude();
             accuracySum += current.getAccuracy();
-            lastProvider = current.getProvider();
+            // It is milliseconds, otherwise seconds
+            if (int(std::log10(current.getTime())) + 1 == 13) {
+                currentTime = current.getTime() / 1000;
+            } else if (int(std::log10(current.getTime()) + 1) == 10){
+                currentTime = current.getTime();
+            }
+            if (lastTime != 0) {
+                timePeriod += currentTime - (lastTime / 1000);
+            }
             lastTime = current.getTime();
+            lastProvider = current.getProvider();
             counter++;
+        } else {
+            if (timePeriod == 0) {
+                Position p;
+                return p;
+            }
+            break;
         }
     }
-
     Position p (accuracySum / counter, lastTime, lastProvider);
     try {
         p.setLatitude(latitudeSum / counter);

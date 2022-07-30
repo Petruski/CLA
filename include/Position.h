@@ -34,6 +34,8 @@ public:
     // a coordinate on the perimeter counts as inside
     bool isInside(Coordinate p);
     bool isInside(double latitude, double longitude);
+
+    bool operator==(const Position& p);
 };
 
 
