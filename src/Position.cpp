@@ -88,3 +88,10 @@ bool Position::isInside(double latitude, double longitude) {
     return isInside(p);
 }
 
+bool Position::operator==(const Position &p) {
+    return this->latitude == p.latitude &&
+           this->longitude == p.longitude &&
+           this->accuracy == p.accuracy &&
+           this->time == p.time &&
+           this->provider == p.provider;
+}

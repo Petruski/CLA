@@ -5,11 +5,9 @@
 #include "Statistics.h"
 #include "PositionParser.h"
 #include "Point.h"
-#include "Edge.h"
 #include "Triangle.h"
 #include <cmath>
 #include <vector>
-#include <cfloat>
 
 double Statistics::multiBayesian(double specificity, double sensitivity, double prior, int negativeResults,
                                  int positiveResults) {
@@ -28,7 +26,7 @@ double Statistics::singleBayesian(double specificity, double sensitivity, double
 
 double Statistics::calcSensitivity(const VenueRect& venueRect, int margin, int iterations) {
     std::vector<Coordinate> corners = venueRect.getCorners();
-    DataStreamIterator<Coordinate> cornerIt (corners);
+    DataStreamIterator<Coordinate> cornerIt(corners);
     // Order the corners SW, NW, NE, SE
     corners = PositionParser::order(cornerIt);
     // Determine the distances between the SW corner and the other corners
@@ -51,7 +49,6 @@ double Statistics::calcSensitivity(const VenueRect& venueRect, int margin, int i
     double rightTriangleArea = rightTriangle.area();
     std::vector<Point> leftTrianglePoints = leftTriangle.generatePointsInside(iterations);
     std::vector<Point> rightTrianglePoint = rightTriangle.generatePointsInside(iterations);
-    // TODO - Area that falls inside the rectangle but is outside one of the triangles are not accounted for
     double totalLeftTriangleArea = 0;
     double totalRightTriangleArea = 0;
     for (const Point& p : leftTrianglePoints) {
@@ -67,7 +64,7 @@ double Statistics::calcSensitivity(const VenueRect& venueRect, int margin, int i
 
 double Statistics::calcSpecificity(const VenueRect& venueRect, int margin, int iterations) {
     std::vector<Coordinate> corners = venueRect.getCorners();
-    DataStreamIterator<Coordinate> cornerIt (corners);
+    DataStreamIterator<Coordinate> cornerIt(corners);
     // Order the corners SW, NW, NE, SE
     corners = PositionParser::order(cornerIt);
     // Determine the distances between the SW corner and the other corners

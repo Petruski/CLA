@@ -15,7 +15,7 @@ class PositionParser {
 public:
     static std::vector<Coordinate> order(DataStreamIterator<Coordinate> &iterator);
     static void filter(DataStreamIterator<Position> &iterator, double aFilter);
-    static Position average(DataStreamIterator<Position> &iterator, int amount);
+    static Position average(DataStreamIterator<Position> &iterator, int time);
 };
 
 
