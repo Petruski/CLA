@@ -62,6 +62,7 @@ Position PositionParser::average(DataStreamIterator<Position> &iterator, int sec
             break;
         }
     }
+
     Position p (accuracySum / counter, lastTime, lastProvider);
     try {
         p.setLatitude(latitudeSum / counter);

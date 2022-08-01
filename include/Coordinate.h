@@ -28,14 +28,11 @@ public:
     // get earth radius at this coordinate in meters
     [[nodiscard]] double getEarthRadius() const;
 
-    // Get bearing (angle) between two coordinates
+    // Get bearing (angle in degrees) between two coordinates
     [[nodiscard]] double getBearingTo(Coordinate coordinate) const;
 
     // add degrees to coordinate
     void add(double latitude, double longitude);
-
-    // new coordinate given bearing and distance from another
-    [[nodiscard]] Coordinate newCoordinate(double bearing, double distance) const;
 
     // real earth distance in meters
     [[nodiscard]] double getDistanceTo(Coordinate coordinate) const;
