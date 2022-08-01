@@ -13,12 +13,12 @@
 #include <vector>
 #include "Coordinate.h"
 #include "Position.h"
+#include "Shape.h"
 
 class Venue {
 protected:
-    std::string name;
-    Coordinate mapMarker;
-
+    std::string m_name;
+    Coordinate m_mapMarker;
 public:
     [[nodiscard]] const std::string &getName() const;
     void setName(const std::string &aName);
@@ -26,10 +26,9 @@ public:
     void setMapMarker(double latitude, double longitude);
 
     virtual double getCircumference() = 0;
-    virtual bool isInside(Position position) = 0;
     [[nodiscard]] virtual std::vector<Coordinate> getCorners() const = 0;
 
-    virtual  ~Venue() {}
+    virtual  ~Venue() = default;
 };
 
 

@@ -21,6 +21,22 @@ add_executable(CustomerLocationAlgorithmApp
         include/VenueRect.h
         include/DataStreamIterator.hpp
         src/PositionParser.cpp
-        include/PositionParser.h src/Statistics.cpp include/Statistics.h include/Point.h include/Edge.h src/Triangle.cpp include/Triangle.h
-        include/PositionParser.h include/Constants.h src/CLA.cpp include/CLA.h)
+        include/PositionParser.h
+        src/Statistics.cpp
+        include/Statistics.h
+        include/Point.h
+        include/Edge.h
+        src/Triangle.cpp
+        include/Triangle.h
+        include/PositionParser.h
+        include/Constants.h
+        src/Rectangle.cpp
+        include/Rectangle.h
+        src/Circle.cpp
+        include/Circle.h
+        src/Shape.cpp
+        include/Shape.h
+        src/UtilityFunctions.cpp
+        include/UtilityFunctions.h
+        src/CLA.cpp include/CLA.h)
 

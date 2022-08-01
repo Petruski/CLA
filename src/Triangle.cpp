@@ -4,6 +4,7 @@
 
 #include <cfloat>
 #include "Triangle.h"
+#include "UtilityFunctions.h"
 
 std::vector<Point> Triangle::generatePointsInside(int amount) {
     std::vector<Point> points;
@@ -338,5 +339,20 @@ double Triangle::calculateOuterCircleSectionArea(const std::vector<std::tuple<Ed
     // Error code
     return -1;
 }
+
+bool Triangle::isInside(Point point) {
+
+    // area of triangles PAB, PBC, PAC
+    Triangle pab(point, m_origin, m_adjacent);
+    Triangle pbc(point, m_adjacent, m_opposite);
+    Triangle pac(point, m_origin, m_opposite);
+    double trianglesArea = pab.area() + pbc.area() + pac.area();
+
+    if (utils::equal(trianglesArea, area()))
+        return true;
+
+    return false;
+}
+
 
 

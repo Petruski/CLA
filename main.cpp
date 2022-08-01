@@ -11,97 +11,81 @@
 #include "Triangle.h"
 #include "Constants.h"
 #include "CLA.h"
-
-double toDouble(char *c) {
-    if (isdigit(c[0])) {
-        return strtod(c, nullptr);
-    } else {
-        throw std::runtime_error("unable to convert value to double");
-    }
-}
-
-int toInt(char *c) {
-    if (isdigit(c[0])) {
-        return std::stoi(c, nullptr,10);
-    } else {
-        throw std::runtime_error("unable to convert value to int");
-    }
-}
+#include "Rectangle.h"
+#include "Circle.h"
+#include "UtilityFunctions.h"
+#include "Point.h"
 
 int main(int argc, char *argv[]) {
 
     // string describing how to use cla
     std::string appName(argv[0]);
     std::string usage = "Usage: \n"
-            + appName + "[cornerA][cornerB][cornerC][cornerD]\n"
-            + appName + "[filename][cornerA][cornerB][cornerC][cornerD]\n"
-            + appName + "[filename][limit][no_of_variables][cornerA][cornerB][cornerC][cornerD]";
+        + appName + "[latitude_1][longitude_1][latitude_2][longitude_2][latitude_3][longitude_3][latitude_4][longitude_4]\n"
+        + appName + "[filename][latitude_1][longitude_1][latitude_2][longitude_2][latitude_3][longitude_3][latitude_4][longitude_4]\n"
+        + appName + "[filename][isInsideLimit][latitude_1][longitude_1][latitude_2][longitude_2][latitude_3][longitude_3][latitude_4][longitude_4]";
 
     // check arg
     std::string fileName;
-    int monteCarloValues;
-    double limit, cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat, cornerC_lon, cornerD_lat, cornerD_lon;
+    double isInsideLimit, cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat, cornerC_lon, cornerD_lat, cornerD_lon;
 
-    if (!(argc == 9 || argc == 10 || argc == 12)) {
+    if (!(argc == 9 || argc == 10 || argc == 11)) {
         std::cout << usage << std::endl;
-        return 1;
+        return -1;
     }
     if (argc == 9) {
         fileName = DEFAULT_FILENAME;;
-        limit = IS_INSIDE_LIMIT;
-        monteCarloValues = NO_OF_RANDOM_MC_VARIABLES;
+        isInsideLimit = IS_INSIDE_LIMIT;
 
         try {
-            cornerA_lat = toDouble(argv[1]);
-            cornerA_lon = toDouble(argv[2]);
-            cornerB_lat = toDouble(argv[3]);
-            cornerB_lon = toDouble(argv[4]);
-            cornerC_lat = toDouble(argv[5]);
-            cornerC_lon = toDouble((argv[6]));
-            cornerD_lat = toDouble(argv[7]);
-            cornerD_lon = toDouble(argv[8]);
+            cornerA_lat = utils::toDouble(argv[1]);
+            cornerA_lon = utils::toDouble(argv[2]);
+            cornerB_lat = utils::toDouble(argv[3]);
+            cornerB_lon = utils::toDouble(argv[4]);
+            cornerC_lat = utils::toDouble(argv[5]);
+            cornerC_lon = utils::toDouble((argv[6]));
+            cornerD_lat = utils::toDouble(argv[7]);
+            cornerD_lon = utils::toDouble(argv[8]);
         } catch (std::runtime_error &e) {
             std::cout << "Exception: " << e.what() << std::endl;
             std::cout << usage << std::endl;
-            return 1;
+            return -1;
         }
     }
     else if (argc == 10) {
         fileName = argv[1];
-        limit = IS_INSIDE_LIMIT;
-        monteCarloValues = NO_OF_RANDOM_MC_VARIABLES;
+        isInsideLimit = IS_INSIDE_LIMIT;
 
         try {
-            cornerA_lat = toDouble(argv[2]);
-            cornerA_lon = toDouble(argv[3]);
-            cornerB_lat = toDouble(argv[4]);
-            cornerB_lon = toDouble(argv[5]);
-            cornerC_lat = toDouble(argv[6]);
-            cornerC_lon = toDouble((argv[7]));
-            cornerD_lat = toDouble(argv[8]);
-            cornerD_lon = toDouble(argv[9]);
+            cornerA_lat = utils::toDouble(argv[2]);
+            cornerA_lon = utils::toDouble(argv[3]);
+            cornerB_lat = utils::toDouble(argv[4]);
+            cornerB_lon = utils::toDouble(argv[5]);
+            cornerC_lat = utils::toDouble(argv[6]);
+            cornerC_lon = utils::toDouble((argv[7]));
+            cornerD_lat = utils::toDouble(argv[8]);
+            cornerD_lon = utils::toDouble(argv[9]);
         } catch (std::runtime_error &e) {
             std::cout << "Exception: " << e.what() << std::endl;
             std::cout << usage << std::endl;
-            return 1;
+            return -1;
         }
     }
-    // if argc == 12
+        // if argc == 11
     else  {
 
         fileName = argv[1];
 
         try {
-            limit = toDouble(argv[2]);
-            monteCarloValues = toInt(argv[3]);
-            cornerA_lat = toDouble(argv[4]);
-            cornerA_lon = toDouble(argv[5]);
-            cornerB_lat = toDouble(argv[6]);
-            cornerB_lon = toDouble(argv[7]);
-            cornerC_lat = toDouble(argv[8]);
-            cornerC_lon = toDouble((argv[9]));
-            cornerD_lat = toDouble(argv[10]);
-            cornerD_lon = toDouble(argv[11]);
+            isInsideLimit = utils::toDouble(argv[2]);
+            cornerA_lat = utils::toDouble(argv[3]);
+            cornerA_lon = utils::toDouble(argv[4]);
+            cornerB_lat = utils::toDouble(argv[5]);
+            cornerB_lon = utils::toDouble(argv[6]);
+            cornerC_lat = utils::toDouble(argv[7]);
+            cornerC_lon = utils::toDouble((argv[8]));
+            cornerD_lat = utils::toDouble(argv[9]);
+            cornerD_lon = utils::toDouble(argv[10]);
         } catch (std::runtime_error &e) {
             std::cout << "Exception: " << e.what() << std::endl;
             std::cout << usage << std::endl;
@@ -111,17 +95,115 @@ int main(int argc, char *argv[]) {
     }
     // Initialize CLA
     CLA cla(cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat,
-            cornerC_lon, cornerD_lat, cornerD_lon, monteCarloValues, limit, fileName);
+            cornerC_lon, cornerD_lat, cornerD_lon, 10000, isInsideLimit, fileName);
     cla.startCLA();
     std::cout << "Filename is: " << fileName << std::endl;
-    std::cout << "Limit is: " << limit << std::endl;
-    std::cout << "Variable count is: " << monteCarloValues << std::endl;
+    std::cout << "IsInsideLimit is: " << isInsideLimit << std::endl;
     std::cout << "Corner A: " << cornerA_lat << ", " << cornerA_lon << std::endl;
     std::cout << "Corner B: " << cornerB_lat << ", " << cornerB_lon << std::endl;
     std::cout << "Corner C: " << cornerC_lat << ", " << cornerC_lon << std::endl;
     std::cout << "Corner D: " << cornerD_lat << ", " << cornerD_lon << std::endl;
 
 
+
+    /**
+     * Get coordinates in geographic and cartesian plane
+     */
+    Coordinate aC, bC, cC, dC, marker;
+//    aC.set(45, 70);
+//    bC.set(45, 70.007);
+//    cC.set(45.004, 70.007);
+//    dC.set(45.004, 70);
+//    marker.set(44.998, 69.99);
+//    VenueRect venueRect(aC, bC, cC, dC);
+//    double distanceGeo = aC.getDistanceTo(marker);
+//    double bearingGeo = aC.getBearingTo(marker); // degrees
+//
+//    double height = aC.getDistanceTo(bC);
+//    double width = bC.getDistanceTo(cC);
+//    Rectangle rec(Point(0,0), height, width, 0);
+//    double markerX = distanceGeo * std::cos(utils::toRadians(bearingGeo));
+//    double markerY = distanceGeo * std::sin(utils::toRadians(bearingGeo));
+//
+//    std::vector<Point> recPoints = rec.getPoints();
+//    for (auto p: recPoints) {
+//        std::cout << "Corner: (" << p.getX() << "," << p.getY() << ")\n";
+//    }
+//    Point markerPoint(markerX,markerY);
+//    std::cout << "Marker: (" << markerPoint.getX() << "," << markerPoint.getY() << ")\n";
+    /**
+     * TESTING GEOMETRIC CLASSES
+     */
+/*
+    Point origin(2,2);
+    Shape *rectangle = new Rectangle(origin, 5, 10, 45 * std::numbers::pi / 180);
+
+    std::cout << "Origin: (" << rectangle->getOrigin().getX() << "," << rectangle->getOrigin().getY() << ")\n";
+    std::cout << "Area: " << rectangle->area() << std::endl;
+    std::cout << "Corners: ";
+    std::vector<Point> corners = rectangle->getPoints();
+    for (auto point: corners) {
+        std::cout << "(" << point.getX() << "," << point.getY() << ") ";
+    }
+
+    std::vector<Point> generatedPoints = rectangle->generatePointsInside(5);
+    for (auto p: generatedPoints) {
+        std::cout << "Generated point: (" << p.getX() << "," << p.getY() << ")";
+        if(rectangle->isInside(p)) {
+            std::cout << " Gen-point is inside" << std::endl;
+        } else {
+            std::cout << " Gen-point is outside" << std::endl;
+        }
+    }
+
+    Point circleOrigin(5,10);
+    Shape *circle = new Circle(circleOrigin, 5);
+    std::cout << "Circle Origin: (" << circle->getOrigin().getX() << "," << circle->getOrigin().getY() << ")\n";
+    //std::cout << "Circle radius: " << circle.getRadius() << std::endl;
+    std::cout << "Circle area: " << circle->area() << std::endl;
+    generatedPoints = circle->generatePointsInside(5);
+    for (auto p: generatedPoints) {
+        std::cout << "Generated point: (" << p.getX() << "," << p.getY() << ") Distance to point: " << circle->getOrigin().distanceTo(p);
+        if(circle->isInside(p)) {
+            std::cout << " Gen-point is inside" << std::endl;
+        } else {
+            std::cout << " Gen-point is outside" << std::endl;
+        }
+    }
+
+    for (int i = 0; i < 20; i++) {
+        //    std::cout << "Intersection area: " << circle->intersectionArea(rectangle, NO_OF_MONTE_CARLO_SAMPLES) << std::endl;
+    }
+
+    Point triOrigin(5, 10);
+    Point triAdj(7,9);
+    Point triOpp(1,1);
+    Shape *triangle = new Triangle(triOrigin, triAdj, triOpp);
+    std::cout << "Tri Origin: (" << triangle->getOrigin().getX() << "," << triangle->getOrigin().getY() << ")\n";
+    std::cout << "Tri area: " << triangle->area() << std::endl;
+    generatedPoints = triangle->generatePointsInside(5);
+    for (auto p: generatedPoints) {
+        std::cout << "Generated point: (" << p.getX() << "," << p.getY() << ")";
+        if(triangle->isInside(p)) {
+            std::cout << " Gen-point is inside" << std::endl;
+        } else {
+            std::cout << " Gen-point is outside" << std::endl;
+        }
+    }
+
+    for (int i = 0; i < 20; i++) {
+        std::cout << "Intersection area: " << circle->intersectionArea_approximated(triangle, NO_OF_MONTE_CARLO_SAMPLES) << std::endl;
+    }
+
+    std::cout << std::endl;
+    Point test(2,5);
+    std::cout << "Test point: (" << test.getX() << "," << test.getY() << ")";
+    if(triangle->isInside(test)) {
+        std::cout << " Test-point is inside" << std::endl;
+    } else {
+        std::cout << " Test-point is outside" << std::endl;
+    }
+*/
 
     /* ****************************************
      * TESTING COORDINATES/POSITION CLASS

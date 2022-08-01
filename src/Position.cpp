@@ -3,32 +3,31 @@
 //
 
 #include "../include/Position.h"
-#include <cmath>
 #include <stdexcept>
 #include <iostream>
 
 /**
  * Getter
- * @return accuracy radius in meters
+ * @return m_accuracy radius in meters
  */
 double Position::getAccuracy() const {
-    return accuracy;
+    return m_accuracy;
 }
 
 /**
  * setter
- * @param aAccuracy set accuracy radius in meters
+ * @param aAccuracy set m_accuracy radius in meters
  */
 void Position::setAccuracy(double aAccuracy) {
-    accuracy = aAccuracy;
+    m_accuracy = aAccuracy;
 }
 
 /**
  * getter
- * @return timestamp of the time of the measurement
+ * @return timestamp of the m_time of the measurement
  */
 long Position::getTime() const {
-    return time;
+    return m_time;
 }
 
 /**
@@ -36,34 +35,33 @@ long Position::getTime() const {
  * @param aTime sets timestamp
  */
 void Position::setTime(long aTime) {
-    time = aTime;
+    m_time = aTime;
 }
 
 /**
  * getter
- * @return the provider of the GNSS position
+ * @return the m_provider of the GNSS position
  */
 const std::string &Position::getProvider() const {
-    return provider;
+    return m_provider;
 }
 
 /**
  * setter
- * @param provider sets the provider of the measurement
+ * @param provider sets the m_provider of the measurement
  */
 void Position::setProvider(const std::string &provider) {
-    Position::provider = provider;
+    Position::m_provider = provider;
 }
 
 /**
  * Check if a coordinate is within the perimeter of the accuracy. Includes values on the perimeter.
  * @param p the coordinate that is checked against this position
- * @return true if coordinate is within or on accuracy perimeter
+ * @return true if coordinate is within or on m_accuracy perimeter
  */
 bool Position::isInside(Coordinate p) {
 
-
-    if (getDistanceTo(p) >= accuracy)
+    if (getDistanceTo(p) >= m_accuracy)
         return false;
 
     return true;
@@ -71,9 +69,9 @@ bool Position::isInside(Coordinate p) {
 
 /**
  * Check if a coordinate is within the perimeter of the accuracy. Includes values on the perimeter.
- * @param latitude latitude of the coordinate that is checked against this position
- * @param longitude longitude of the coordinate that is checked against this position
- * @return true if coordinate is within or on accuracy perimeter
+ * @param latitude m_latitude of the coordinate that is checked against this position
+ * @param longitude m_longitude of the coordinate that is checked against this position
+ * @return true if coordinate is within or on m_accuracy perimeter
  */
 bool Position::isInside(double latitude, double longitude) {
 

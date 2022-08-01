@@ -10,7 +10,7 @@
  *
  * @param iterator
  * @param aFilter
- * @return Filtered stream against GNSS accuracy
+ * @return Filtered stream against GNSS m_accuracy
  */
 void PositionParser::filter(DataStreamIterator<Position> &iterator, double aFilter) {
     std::vector<Position> temp;
