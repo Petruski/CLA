@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <algorithm>
 #include <cmath>
 #include "PositionParser.h"
 

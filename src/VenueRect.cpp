@@ -2,14 +2,9 @@
 // Created by Mattias Lindell on 2022-04-26.
 //
 
-#include <iostream>
-#include <cmath>
-#include <random>
-#include <iomanip>
 #include "../include/VenueRect.h"
 #include "DataStreamIterator.hpp"
 #include "PositionParser.h"
-#include "Rectangle.h"
 
 VenueRect::VenueRect(Coordinate cornerA, Coordinate cornerB, Coordinate cornerC, Coordinate cornerD) {
 

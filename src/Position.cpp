@@ -59,6 +59,7 @@ void Position::setProvider(const std::string &provider) {
  * @param p the coordinate that is checked against this position
  * @return true if coordinate is within or on m_accuracy perimeter
  */
+ /*
 bool Position::isInside(Coordinate p) {
 
     if (getDistanceTo(p) >= m_accuracy)
@@ -66,6 +67,7 @@ bool Position::isInside(Coordinate p) {
 
     return true;
 }
+*/
 
 /**
  * Check if a coordinate is within the perimeter of the accuracy. Includes values on the perimeter.
@@ -73,6 +75,7 @@ bool Position::isInside(Coordinate p) {
  * @param longitude m_longitude of the coordinate that is checked against this position
  * @return true if coordinate is within or on m_accuracy perimeter
  */
+ /*
 bool Position::isInside(double latitude, double longitude) {
 
     Coordinate p;
@@ -85,11 +88,12 @@ bool Position::isInside(double latitude, double longitude) {
     }
     return isInside(p);
 }
+  */
 
 bool Position::operator==(const Position &p) {
-    return this->latitude == p.latitude &&
-           this->longitude == p.longitude &&
-           this->accuracy == p.accuracy &&
-           this->time == p.time &&
-           this->provider == p.provider;
+    return this->getLatitude() == p.getLatitude() &&
+           this->getLongitude() == p.getLongitude() &&
+           this->getAccuracy() == p.getAccuracy() &&
+           this->getTime() == p.getTime() &&
+           this->getProvider() == p.getProvider();
 }
