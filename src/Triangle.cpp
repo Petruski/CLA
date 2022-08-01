@@ -23,7 +23,7 @@ std::vector<Point> Triangle::generatePointsInside(int amount) {
         double area_one = area(x, y, m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
         double area_two = area(m_origin.getX(), m_origin.getY(), x, y, m_adjacent.getX(), m_adjacent.getY());
         double area_three = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), x, y);
-        if (area_one + area_two + area_three == original_area) {
+        if(utils::equal(area_one + area_two + area_three, original_area)) {
             points.emplace_back(x, y);
         }
     }
@@ -47,7 +47,7 @@ std::vector<Point> Triangle::generatePointsOutside(int amount, int distance) {
         double area_one = area(x, y, m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
         double area_two = area(m_origin.getX(), m_origin.getY(), x, y, m_adjacent.getX(), m_adjacent.getY());
         double area_three = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), x, y);
-        if (area_one + area_two + area_three != original_area) {
+        if(!utils::equal(area_one + area_two + area_three, original_area)) {
             points.emplace_back(x, y);
         }
     }

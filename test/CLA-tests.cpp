@@ -569,10 +569,11 @@ SCENARIO("Testing Triangle class") {
             REQUIRE(points[1] == Point(3,4));
             REQUIRE(points[2] == Point(6,5));
         }
+
         AND_WHEN("Generating points outside") {
-            std::vector<Point> points = t.generatePointsOutside(100, 4);
+            std::vector<Point> points = t.generatePointsOutside(1000, 4);
             THEN("the correct amount of points should be generated") {
-                REQUIRE(points.size() == 100);
+                REQUIRE(points.size() == 1000);
             }
             THEN("all points should be outside") {
                 for (auto point: points) {
@@ -580,9 +581,9 @@ SCENARIO("Testing Triangle class") {
                 }
             }
         }AND_WHEN("Generating points inside") {
-            std::vector<Point> points = t.generatePointsInside(100);
+            std::vector<Point> points = t.generatePointsInside(1000);
             THEN("the correct amount of points should be generated") {
-                REQUIRE(points.size() == 100);
+                REQUIRE(points.size() == 1000);
             }
             THEN("all points should be inside") {
                 for (auto point: points) {
