@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <utility>
+#include <algorithm>
 #include "../include/FileParser.h"
 
 /**
@@ -27,7 +28,7 @@ std::vector<Position> FileParser::getPositions() {
         // replace comma with whitespace
         std::replace(line.begin(), line.end(), ',', ' ');
 
-        // Create a stringstream of line read from file
+        // Create a string stream of line read from file
         std::stringstream ss(line);
 
         double latitude;

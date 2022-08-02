@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <algorithm>
 #include <cmath>
 #include "PositionParser.h"
 
@@ -10,7 +11,7 @@
  *
  * @param iterator
  * @param aFilter
- * @return Filtered stream against GNSS accuracy
+ * @return Filtered stream against GNSS m_accuracy
  */
 void PositionParser::filter(DataStreamIterator<Position> &iterator, double aFilter) {
     std::vector<Position> temp;
@@ -61,6 +62,7 @@ Position PositionParser::average(DataStreamIterator<Position> &iterator, int sec
             break;
         }
     }
+
     Position p (accuracySum / counter, lastTime, lastProvider);
     try {
         p.setLatitude(latitudeSum / counter);

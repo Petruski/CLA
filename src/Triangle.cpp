@@ -4,6 +4,7 @@
 
 #include <cfloat>
 #include "Triangle.h"
+#include "UtilityFunctions.h"
 
 std::vector<Point> Triangle::generatePointsInside(int amount) {
     std::vector<Point> points;
@@ -22,7 +23,7 @@ std::vector<Point> Triangle::generatePointsInside(int amount) {
         double area_one = area(x, y, m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
         double area_two = area(m_origin.getX(), m_origin.getY(), x, y, m_adjacent.getX(), m_adjacent.getY());
         double area_three = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), x, y);
-        if (area_one + area_two + area_three == original_area) {
+        if(utils::equal(area_one + area_two + area_three, original_area)) {
             points.emplace_back(x, y);
         }
     }
@@ -46,7 +47,7 @@ std::vector<Point> Triangle::generatePointsOutside(int amount, int distance) {
         double area_one = area(x, y, m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
         double area_two = area(m_origin.getX(), m_origin.getY(), x, y, m_adjacent.getX(), m_adjacent.getY());
         double area_three = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), x, y);
-        if (area_one + area_two + area_three != original_area) {
+        if(!utils::equal(area_one + area_two + area_three, original_area)) {
             points.emplace_back(x, y);
         }
     }
@@ -338,5 +339,20 @@ double Triangle::calculateOuterCircleSectionArea(const std::vector<std::tuple<Ed
     // Error code
     return -1;
 }
+
+bool Triangle::isInside(Point point) {
+
+    // area of triangles PAB, PBC, PAC
+    Triangle pab(point, m_origin, m_adjacent);
+    Triangle pbc(point, m_adjacent, m_opposite);
+    Triangle pac(point, m_origin, m_opposite);
+    double trianglesArea = pab.area() + pbc.area() + pac.area();
+
+    if (utils::equal(trianglesArea, area()))
+        return true;
+
+    return false;
+}
+
 
 

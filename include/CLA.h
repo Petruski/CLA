@@ -14,10 +14,10 @@
 class CLA {
 public:
     CLA(double cornerA_lat, double cornerA_lon, double cornerB_lat, double cornerB_lon, double cornerC_lat, double cornerC_lon,
-        double cornerD_lat, double cornerD_lon, int monteCarloVariables, double limit, std::string filename)
+        double cornerD_lat, double cornerD_lon, int margin, double isInsideLimit, std::string filename)
     : m_cornerA_lat(cornerA_lat), m_cornerA_lon(cornerA_lon), m_cornerB_lat(cornerB_lat), m_cornerB_lon(cornerB_lon),
-    m_cornerC_lat(cornerC_lat), m_cornerC_lon(cornerC_lon), m_cornerD_lat(cornerD_lat), m_cornerD_lon(cornerD_lon),
-    m_monteCarloVariables(monteCarloVariables), m_limit(limit), m_filename(std::move(filename)) {}
+      m_cornerC_lat(cornerC_lat), m_cornerC_lon(cornerC_lon), m_cornerD_lat(cornerD_lat), m_cornerD_lon(cornerD_lon),
+      m_margin(margin), m_isInsideLimit(isInsideLimit), m_filename(std::move(filename)) {}
     void startCLA();
     void startShortestDistance();
 private:
@@ -29,8 +29,8 @@ private:
     double m_cornerC_lon;
     double m_cornerD_lat;
     double m_cornerD_lon;
-    int m_monteCarloVariables;
-    double m_limit;
+    int m_margin;
+    double m_isInsideLimit;
     std::string m_filename;
 };
 
