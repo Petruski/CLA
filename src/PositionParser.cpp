@@ -24,18 +24,14 @@ void PositionParser::filter(DataStreamIterator<Position> &iterator, double aFilt
 }
 /**
  * @param iterator
- * @param amount
+ * @param seconds
  * @return Averaged Position - Naive averaging at the moment
  */
 Position PositionParser::average(DataStreamIterator<Position> &iterator, int seconds) {
-    double latitudeSum = 0;
-    double longitudeSum = 0;
-    double accuracySum = 0;
     std::string lastProvider;
     int counter = 0;
-    long timePeriod = 0;
-    long lastTime = 0;
-    long currentTime = 0;
+    double latitudeSum = 0, longitudeSum = 0, accuracySum = 0;
+    long timePeriod = 0, lastTime = 0, currentTime = 0;
     while (timePeriod < seconds) {
         if (iterator.hasNext()) {
             Position current = iterator.next();
@@ -72,6 +68,54 @@ Position PositionParser::average(DataStreamIterator<Position> &iterator, int sec
     }
     return p;
 }
+
+/**
+ * @param iterator
+ * @param seconds
+ * Retrieves the median Position from a set of coordinates. Coordinates ordered by time
+ */
+
+Position PositionParser::median(DataStreamIterator<Position> &iterator, int seconds) {
+    std::vector<Position> positions;
+    long timePeriod = 0, lastTime = 0, currentTime = 0;
+    while (timePeriod < seconds) {
+        if (iterator.hasNext()) {
+            Position current = iterator.next();
+            // It is milliseconds, otherwise seconds
+            if (int(std::log10(current.getTime())) + 1 == 13) {
+                currentTime = current.getTime() / 1000;
+            } else if (int(std::log10(current.getTime()) + 1) == 10){
+                currentTime = current.getTime();
+            }
+            if (lastTime != 0) {
+                timePeriod += currentTime - (lastTime / 1000);
+            }
+            lastTime = current.getTime();
+            if (timePeriod <= seconds) {
+                positions.push_back(current);
+            }
+        } else {
+            if (timePeriod == 0) {
+                Position p;
+                return p;
+            }
+            break;
+        }
+    }
+    size_t n = positions.size();
+    size_t middle = n / 2;
+    if (n % 2 != 0) {
+        return positions[middle + 1];
+    } else {
+        Position position(std::min(positions[middle].getAccuracy(), positions[middle + 1].getAccuracy()),
+                        std::max(positions[middle].getTime(), positions[middle + 1].getTime()),
+                        positions[middle + 1].getProvider());
+        position.setLatitude((positions[middle].getLatitude() + positions[middle + 1].getLatitude()) / 2);
+        position.setLongitude((positions[middle].getLongitude() + positions[middle + 1].getLongitude()) / 2);
+        return position;
+    }
+}
+
 
 /**
  *

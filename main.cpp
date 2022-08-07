@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
     }
     // Initialize CLA
     CLA cla(cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat,
-            cornerC_lon, cornerD_lat, cornerD_lon, 10000, isInsideLimit, fileName);
+            cornerC_lon, cornerD_lat, cornerD_lon, isInsideLimit, isInsideLimit, fileName);
     cla.startCLA();
     std::cout << "Filename is: " << fileName << std::endl;
     std::cout << "IsInsideLimit is: " << isInsideLimit << std::endl;

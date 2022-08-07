@@ -31,7 +31,7 @@ void CLA::startCLA() {
     std::vector<Position> positions = fileParser.getPositions();
     DataStreamIterator iterator(positions);
 
-    // Filter the positions -- TODO average potentially
+    // Filter the positions -- TODO determine if average or median should be used
     PositionParser::filter(iterator, m_margin);
     Position emptyPos;
     Position position;
