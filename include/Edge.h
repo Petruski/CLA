@@ -20,6 +20,7 @@ public:
     }
     [[nodiscard]] Point getA() const { return m_point_a; }
     [[nodiscard]] Point getB() const { return m_point_b; }
+    [[nodiscard]] bool containsPoint(Point point) const { return point == m_point_a || point == m_point_b; }
 private:
     Point m_point_a;
     Point m_point_b;

@@ -47,6 +47,8 @@ void CLA::startCLA() {
 
     // cartesian projection of venue
     std::vector<Coordinate> venueCorners = venueRect.getCorners();
+    DataStreamIterator<Coordinate> it(venueCorners);
+    PositionParser::order(it);
     double height = (venueCorners[0].getDistanceTo(venueCorners[1]) + venueCorners[2].getDistanceTo(venueCorners[3])) / 2;
     double width = (venueCorners[1].getDistanceTo(venueCorners[2]) + venueCorners[3].getDistanceTo(venueCorners[0])) / 2;
     Shape *rectangle = new Rectangle(Point(0,0), height, width, 0); // the projection
@@ -80,8 +82,13 @@ void CLA::startCLA() {
     delete rectangle;
 
     // Calculate the specificity and sensitivity for use in Bayesian analysis
-    specificity = Statistics::calcSpecificity(venueRect, m_margin, 10000);
-    sensitivity = Statistics::calcSensitivity(venueRect, m_margin, 10000);
+    if (m_isInsideLimit < 0) {
+        specificity = Statistics::calcSpecificity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
+        sensitivity = Statistics::calcSensitivity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
+    } else {
+        specificity = Statistics::calcSpecificity(venueRect, m_margin);
+        sensitivity = Statistics::calcSensitivity(venueRect, m_margin);
+    }
 
     // Calculate the confidence interval for the given successes/failures and some assumed a_prior values
     double low_a_prior_CI = Statistics::multiBayesian(specificity, sensitivity, Statistics::getLowPrior(), negativeResults, positiveResults);

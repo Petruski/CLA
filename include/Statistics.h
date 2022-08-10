@@ -6,6 +6,13 @@
 #define CLA_STATISTICS_H
 
 #include "VenueRect.h"
+#include "Triangle.h"
+#include "PositionParser.h"
+#include "Point.h"
+#include "Rectangle.h"
+#include "Circle.h"
+#include <cmath>
+#include <vector>
 
 /** TO-DO CLEANUP DOCUMENTATION
  * Statistics class
@@ -31,13 +38,17 @@ public:
     static double singleBayesian(double specificity, double sensitivity, double prior);
     static double multiBayesian(double specificity, double sensitivity, double prior, int negativeResults, int positiveResults);
     // P(T+|D) - How likely are you to be placed inside given you are inside
+    static double calcSensitivity(const VenueRect& venueRect, int margin);
     static double calcSensitivity(const VenueRect& venueRect, int margin, int iterations);
     // P(~T|~D) - How likely are you to be placed outside given you are outside
+    static double calcSpecificity(const VenueRect& venueRect, int margin);
     static double calcSpecificity(const VenueRect& venueRect, int margin, int iterations);
     static double getLowPrior() { return m_prior_probabilities[0]; };
     static double getMedPrior() { return m_prior_probabilities[1]; };
     static double getHighPrior() { return m_prior_probabilities[2]; };
 private:
+    static std::vector<Triangle> generateTriangles(std::vector<Coordinate> corners, double &rotation);
+    static std::vector<Triangle> generateTriangles(std::vector<Coordinate> corners);
     // P(D) - Prior values
     constexpr static const double m_prior_probabilities[3] {0.01, 0.05, 0.1};
 };
