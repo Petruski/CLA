@@ -86,8 +86,8 @@ void CLA::startCLA() {
         specificity = Statistics::calcSpecificity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
         sensitivity = Statistics::calcSensitivity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
     } else {
-        specificity = Statistics::calcSpecificity(venueRect, m_margin);
-        sensitivity = Statistics::calcSensitivity(venueRect, m_margin);
+        specificity = Statistics::calcSpecificity(venueRect, m_margin, m_isInsideLimit);
+        sensitivity = Statistics::calcSensitivity(venueRect, m_margin, m_isInsideLimit);
     }
 
     // Calculate the confidence interval for the given successes/failures and some assumed a_prior values

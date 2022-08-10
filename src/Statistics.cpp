@@ -21,7 +21,7 @@ double Statistics::singleBayesian(double specificity, double sensitivity, double
     return multiBayesian(specificity, sensitivity, prior, 0, 1);
 }
 
-double Statistics::calcSensitivity(const VenueRect &venueRect, int margin) {
+double Statistics::calcSensitivity(const VenueRect &venueRect, int margin, double insideLimit) {
     // Get the triangles
     auto corners = venueRect.getCorners();
     double rotation;
@@ -44,7 +44,7 @@ double Statistics::calcSensitivity(const VenueRect &venueRect, int margin) {
         Shape *circle = new Circle(point, margin);
         // Check if it's inside using Monte Carlo simulation
         if (rectangle->intersectionArea_approximated(circle, NO_OF_MONTE_CARLO_SAMPLES) / rectangle->area() >=
-            IS_INSIDE_LIMIT)
+            insideLimit)
             positiveTests++;
     }
     // Return the ratio of positive results of all points that are inside. This is the True Positive Rate
@@ -70,7 +70,7 @@ double Statistics::calcSensitivity(const VenueRect& venueRect, int margin, int i
            rightTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalRightTriangleArea / (M_PI * std::pow(margin, 2) * iterations)));
 }
 
-double Statistics::calcSpecificity(const VenueRect &venueRect, int margin) {
+double Statistics::calcSpecificity(const VenueRect &venueRect, int margin, double insideLimit) {
     // Get the triangles
     double rotation;
     auto corners = venueRect.getCorners();
@@ -93,7 +93,7 @@ double Statistics::calcSpecificity(const VenueRect &venueRect, int margin) {
         Shape *circle = new Circle(point, margin);
         // Check if it's inside using Monte Carlo simulation
         if (rectangle->intersectionArea_approximated(circle, NO_OF_MONTE_CARLO_SAMPLES) / rectangle->area() >=
-            IS_INSIDE_LIMIT)
+            insideLimit)
             falsePositives++;
     }
     // Return the ratio of all the true negatives by the total number of points outside the triangles
