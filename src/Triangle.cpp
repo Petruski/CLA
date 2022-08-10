@@ -30,7 +30,7 @@ std::vector<Point> Triangle::generatePointsInside(int amount) {
     return points;
 }
 
-std::vector<Point> Triangle::generatePointsOutside(int amount, int distance) {
+std::vector<Point> Triangle::generatePointsOutside(int amount) {
     std::vector<Point> points;
     // Create a random device and generator
     std::random_device rd;
@@ -48,6 +48,30 @@ std::vector<Point> Triangle::generatePointsOutside(int amount, int distance) {
         double area_two = area(m_origin.getX(), m_origin.getY(), x, y, m_adjacent.getX(), m_adjacent.getY());
         double area_three = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), x, y);
         if(!utils::equal(area_one + area_two + area_three, original_area)) {
+            points.emplace_back(x, y);
+        }
+    }
+    return points;
+}
+
+std::vector<Point> Triangle::generatePointsOutside(int amount, Shape* pairShape) {
+    std::vector<Point> points;
+    // Create a random device and generator
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_real_distribution<double> dis(0, 1);
+    // Generate a random point according to uniform distribution inside a quadrilateral
+    // Where x = a1v1 + a2v2 where A1, A2 [0,1] and v1, v2 are two of the vertices of the triangle.
+    while (points.size() < amount) {
+        double x = dis(gen) * m_adjacent.getX() + dis(gen) * m_opposite.getX();
+        double y = dis(gen) * m_adjacent.getY() + dis(gen) * m_opposite.getY();
+        // Check if the point is inside the interior of the triangle by creating three triangles from this point
+        // Compare the area of those triangles to the original triangle. If it is not equal it is outside
+        double original_area = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
+        double area_one = area(x, y, m_opposite.getX(), m_opposite.getY(), m_adjacent.getX(), m_adjacent.getY());
+        double area_two = area(m_origin.getX(), m_origin.getY(), x, y, m_adjacent.getX(), m_adjacent.getY());
+        double area_three = area(m_origin.getX(), m_origin.getY(), m_opposite.getX(), m_opposite.getY(), x, y);
+        if(!utils::equal(area_one + area_two + area_three, original_area) && !pairShape->isInside(Point(x, y))) {
             points.emplace_back(x, y);
         }
     }
@@ -353,6 +377,7 @@ bool Triangle::isInside(Point point) {
 
     return false;
 }
+
 
 
 

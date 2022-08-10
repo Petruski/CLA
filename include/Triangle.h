@@ -24,7 +24,8 @@ public:
     // Generates a collection of points inside the triangle
     std::vector<Point> generatePointsInside(int amount) override;
     // Generates a collection of points outside the triangle by some fixed distance
-    std::vector<Point> generatePointsOutside(int amount, int distance);
+    std::vector<Point> generatePointsOutside(int amount);
+    std::vector<Point> generatePointsOutside(int amount, Shape* pairShape);
     // Get area of the triangle
     double area() override;
     // Calculate the area of the outer section between a circle and the triangle

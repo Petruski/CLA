@@ -21,9 +21,12 @@ const int NO_OF_MONTE_CARLO_SAMPLES = 100000;
 // How big part of the circle around a position must be inside a venue for the position to be considered to be inside
 // [0-1] 1 means whole circle must be inside for the position to count as inside. 0.5 means half and 0 means none, etc.
 // A negative number skips the position circle and uses pure coordinates instead.
-const double IS_INSIDE_LIMIT = 0.50;
+const double IS_INSIDE_LIMIT = 0.80;
 
 // used in comparison between doubles, the smallest difference for values to be considered equal
 const double EPSILON = 0.0000001;
+
+// no of points used in specificity and sensitivity simulations
+const int NO_OF_POINT_SAMPLES = 10000;
 
 #endif //CLA_CONSTANTS_H
