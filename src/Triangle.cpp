@@ -100,8 +100,8 @@ double Triangle::circleOuterSectionArea(Point circleCenter, int radius) {
     /**
      * Determine the bounds of the intersections.
      */
-    double min_x, min_y = DBL_MAX;
-    double max_x, max_y = -DBL_MAX;
+    double min_x = DBL_MAX,  min_y = DBL_MAX;
+    double max_x = -DBL_MAX, max_y = -DBL_MAX;
     for (Point p : vertices) {
         if (p.getX() < min_x) {
             min_x = p.getX();
@@ -121,7 +121,7 @@ double Triangle::circleOuterSectionArea(Point circleCenter, int radius) {
     * The equation of the line will be in the slope-intercept form y = mx + b
     */
     double origin_to_opposite_slope = (m_origin.getY() - m_opposite.getY()) / (m_origin.getX() - m_opposite.getX());
-    double origin_to_adjacent_slope = (m_origin.getY() - m_adjacent.getY() / (m_origin.getX() - m_adjacent.getX()));
+    double origin_to_adjacent_slope = (m_origin.getY() - m_adjacent.getY()) / (m_origin.getX() - m_adjacent.getX());
     double opposite_to_adjacent_slope = ((m_opposite.getY() - m_adjacent.getY()) / (m_opposite.getX() - m_adjacent.getX()));
     double origin_to_opposite_y_intercept = m_origin.getY() - (origin_to_opposite_slope * m_origin.getX());
     double origin_to_adjacent_y_intercept = m_origin.getY() - (origin_to_adjacent_slope * m_origin.getX());
@@ -176,17 +176,28 @@ double Triangle::circleLineIntersectionQuadratic(double slope, double intercept,
     if (positive) {
         flip = 1;
     }
+    /** (x - a)^2 + (y - b)^2 = r^2
+     *  Where y is equal to the y intercept.
+     *  a is equal to the x coordinate of the circle center
+     *  b is equal to the y coordinate of the circle center
+     *  r is the radius of the circle
+     *  Rearrange to solve for x
+     */
     double a = (1 + std::pow(slope, 2));
-    double b = 2 * (slope * intercept - slope * circleCenter.getY() - circleCenter.getX());
-    double c = std::pow(intercept, 2) -
-               std::pow(radius, 2) +
-               std::pow(circleCenter.getX(), 2) -
-               (2 * intercept * circleCenter.getY()) +
-               std::pow(circleCenter.getY(), 2);
-    if (std::pow(b, 2) < 4 * a * c) {
+    double b = (2 * slope * intercept) -
+               (2 * circleCenter.getX()) -
+               (2 * slope * circleCenter.getY());
+    double c = std::pow(circleCenter.getX(), 2) +
+               std::pow(intercept, 2) +
+               std::pow(circleCenter.getY(), 2) -
+               (2 * intercept * circleCenter.getY()) -
+               std::pow(radius, 2);
+    double discriminant = b * b - 4 * a * c;
+    if (discriminant <= 0) {
         return -DBL_MAX;
     }
-    return (-b + (flip * std::sqrt(std::pow(b, 2) - 4 * a * c))) / (2 * a);
+    double root = (-b + flip * std::sqrt(discriminant)) / (2 * a);
+    return root;
 }
 
 void Triangle::addIntersectionPoint(std::vector<std::tuple<Edge, Point>> &points, Point a, Point b,

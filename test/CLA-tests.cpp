@@ -571,7 +571,7 @@ SCENARIO("Testing Triangle class") {
         }
 
         AND_WHEN("Generating points outside") {
-            std::vector<Point> points = t.generatePointsOutside(1000, 4);
+            std::vector<Point> points = t.generatePointsOutside(1000);
             THEN("the correct amount of points should be generated") {
                 REQUIRE(points.size() == 1000);
             }
@@ -609,6 +609,23 @@ SCENARIO("Testing Triangle class") {
                 REQUIRE_FALSE(t.isInside(p1));
                 REQUIRE_FALSE(t.isInside(p2));
                 REQUIRE_FALSE(t.isInside(p3));
+            }
+        }
+    }
+    GIVEN("an equilateral triangle") {
+        Triangle t(Point(7, 2), Point(9, 5), Point(11,2));
+        AND_WHEN("a circle with radius one is placed on an edge intersection without containing any vertices") {
+            Circle c(Point(9, 2), 1);
+            THEN("the non-intersecting area should be half its area") {
+                double outsideArea = t.circleOuterSectionArea(c.getOrigin(), c.getRadius());
+                REQUIRE(outsideArea == c.area() / 2);
+            }
+        }
+        AND_WHEN("a circle with radius one is placed on an edge intersection with one vertex") {
+            Circle c(Point(10.5, 2), 1);
+            THEN("the non-intersecting area should be greater than half the area of the circle") {
+                double outsideArea = t.circleOuterSectionArea(c.getOrigin(), c.getRadius());
+                REQUIRE(outsideArea / 2 < outsideArea);
             }
         }
     }
