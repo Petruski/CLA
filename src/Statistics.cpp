@@ -66,8 +66,8 @@ double Statistics::calcSensitivity(const VenueRect& venueRect, int margin, int i
         totalRightTriangleArea += triangles[1].circleOuterSectionArea(p, margin);
     }
     // Return a weighted percentage of areas outside the triangles
-    return (leftTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalLeftTriangleArea / (M_PI * std::pow(margin, 2) * iterations)) +
-           rightTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalRightTriangleArea / (M_PI * std::pow(margin, 2) * iterations)));
+    return (leftTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalLeftTriangleArea / ((M_PI * std::pow(margin, 2) * iterations))) +
+           rightTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalRightTriangleArea / ((M_PI * std::pow(margin, 2) * iterations))));
 }
 
 double Statistics::calcSpecificity(const VenueRect &venueRect, int margin, double insideLimit) {
@@ -117,8 +117,8 @@ double Statistics::calcSpecificity(const VenueRect& venueRect, int margin, int i
     }
     // The total areas represent the likelihood of being placed inside, while being outside the triangle. This is the false positive rate
     // Return a weighted percentage of the areas outside the triangle.
-    return (leftTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalLeftTriangleArea / (M_PI * std::pow(margin, 2) * iterations)) +
-            rightTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalRightTriangleArea / (M_PI * std::pow(margin, 2) * iterations)));
+    return (leftTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalLeftTriangleArea / ((M_PI * std::pow(margin, 2) * iterations))) +
+            rightTriangleArea / (leftTriangleArea + rightTriangleArea) * (totalRightTriangleArea / ((M_PI * std::pow(margin, 2) * iterations))));
 }
 
 std::vector<Triangle> Statistics::generateTriangles(std::vector<Coordinate> corners, double &rotation) {

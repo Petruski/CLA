@@ -36,8 +36,10 @@ void CLA::startCLA() {
     Position emptyPos;
     Position position;
     std::vector<Position> averagedPositions;
-    while (emptyPos != (position = PositionParser::average(iterator, 60))) {
+    while (emptyPos != (position = PositionParser::average(iterator, m_time))) {
         averagedPositions.push_back(position);
+        if (averagedPositions.size() == m_averages)
+            break;
     }
     // Set up variables for statistical analysis
     int positiveResults = 0;
@@ -63,7 +65,7 @@ void CLA::startCLA() {
         Shape *circle = new Circle(Point(x,y), p.getAccuracy()); // the projection
 
         // if isInsideLimit is negative, check if each coordinate is inside venue
-        if (m_isInsideLimit < 0) {
+        if (m_isInsideLimit <= 0) {
             if (rectangle->isInside(circle->getOrigin())) {
                 positiveResults++;
             } else {
@@ -82,7 +84,7 @@ void CLA::startCLA() {
     delete rectangle;
 
     // Calculate the specificity and sensitivity for use in Bayesian analysis
-    if (m_isInsideLimit < 0) {
+    if (m_isInsideLimit <= 0) {
         specificity = Statistics::calcSpecificity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
         sensitivity = Statistics::calcSensitivity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
     } else {
@@ -95,9 +97,10 @@ void CLA::startCLA() {
     double med_a_prior_CI = Statistics::multiBayesian(specificity, sensitivity, Statistics::getMedPrior(), negativeResults, positiveResults);
     double high_a_prior_CI = Statistics::multiBayesian(specificity, sensitivity, Statistics::getHighPrior(), negativeResults, positiveResults);
 
-    std::cout << "Low CI: " << low_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
-    std::cout << "Med CI: " << med_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
-    std::cout << "High CI: " <<  high_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
+//    std::cout << "Low CI: " << low_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
+//    std::cout << "Med CI: " << med_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
+//    std::cout << "High CI: " <<  high_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
+    std::cout << low_a_prior_CI << ", " <<  med_a_prior_CI << ", " << high_a_prior_CI << ", " << positiveResults << ", " << negativeResults << ", " << specificity << ", " << sensitivity;
 }
 
 void CLA::startShortestDistance() {
