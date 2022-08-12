@@ -83,14 +83,18 @@ void CLA::startCLA() {
 
     delete rectangle;
 
+    // -- TODO -- This is extremely slow and does not actually create amazing specificity or sensitivity values.
+    // -- TODO -- It actually seems like the specificity and sensitivity values will trend towards zero or one.
+//    if (m_isInsideLimit <= 0) {
+//        specificity = Statistics::calcSpecificity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
+//        sensitivity = Statistics::calcSensitivity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
+//    } else {
+//        specificity = Statistics::calcSpecificity(venueRect, m_margin, m_isInsideLimit);
+//        sensitivity = Statistics::calcSensitivity(venueRect, m_margin, m_isInsideLimit);
+//    }
     // Calculate the specificity and sensitivity for use in Bayesian analysis
-    if (m_isInsideLimit <= 0) {
-        specificity = Statistics::calcSpecificity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
-        sensitivity = Statistics::calcSensitivity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
-    } else {
-        specificity = Statistics::calcSpecificity(venueRect, m_margin, m_isInsideLimit);
-        sensitivity = Statistics::calcSensitivity(venueRect, m_margin, m_isInsideLimit);
-    }
+    specificity = Statistics::calcSpecificity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
+    sensitivity = Statistics::calcSensitivity(venueRect, m_margin, NO_OF_POINT_SAMPLES);
 
     // Calculate the confidence interval for the given successes/failures and some assumed a_prior values
     double low_a_prior_CI = Statistics::multiBayesian(specificity, sensitivity, Statistics::getLowPrior(), negativeResults, positiveResults);
