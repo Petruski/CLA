@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import subprocess
-import logging
 import threading
-import concurrent.futures
 
 time_periods = [30, 60, 120]
 inside_limits = [0, 0.5, 0.7, 0.9]
