@@ -32,7 +32,7 @@ void CLA::startCLA() {
     DataStreamIterator iterator(positions);
 
     // Filter the positions -- TODO determine if average or median should be used
-    PositionParser::filter(iterator, m_margin);
+    PositionParser::filter(iterator, m_margin, cornerA);
     Position emptyPos;
     Position position;
     std::vector<Position> averagedPositions;
@@ -51,6 +51,7 @@ void CLA::startCLA() {
     std::vector<Coordinate> venueCorners = venueRect.getCorners();
     DataStreamIterator<Coordinate> it(venueCorners);
     PositionParser::order(it);
+    // Get the degrees between SW-NW corners
     double height = (venueCorners[0].getDistanceTo(venueCorners[1]) + venueCorners[2].getDistanceTo(venueCorners[3])) / 2;
     double width = (venueCorners[1].getDistanceTo(venueCorners[2]) + venueCorners[3].getDistanceTo(venueCorners[0])) / 2;
     Shape *rectangle = new Rectangle(Point(0,0), height, width, 0); // the projection

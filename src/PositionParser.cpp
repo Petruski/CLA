@@ -14,7 +14,6 @@
  * @return Filtered stream against GNSS m_accuracy
  */
 void PositionParser::filter(DataStreamIterator<Position> &iterator, double aFilter) {
-    std::vector<Position> temp;
     while(iterator.hasNext()) {
         if (iterator.next().getAccuracy() > aFilter) {
             iterator.remove();
@@ -22,6 +21,24 @@ void PositionParser::filter(DataStreamIterator<Position> &iterator, double aFilt
     }
     iterator.reset();
 }
+
+/**
+ *
+ * @param iterator
+ * @param aFilter
+ * @param centre point
+ * @return Filtered stream against GNSS m_accuracy and distance between user and venue
+ */
+void PositionParser::filter(DataStreamIterator<Position> &iterator, double aFilter, Coordinate centrePoint) {
+    while (iterator.hasNext()) {
+        auto next = iterator.next();
+        if (next.getAccuracy() > aFilter || next.getDistanceTo(centrePoint) > aFilter) {
+            iterator.remove();
+        }
+    }
+    iterator.reset();
+}
+
 /**
  * @param iterator
  * @param seconds
@@ -30,14 +47,15 @@ void PositionParser::filter(DataStreamIterator<Position> &iterator, double aFilt
 Position PositionParser::average(DataStreamIterator<Position> &iterator, int seconds) {
     std::string lastProvider;
     int counter = 0;
-    double latitudeSum = 0, longitudeSum = 0, accuracySum = 0;
+    double latitudeSum = 0, longitudeSum = 0, lastAccuracy = 0;
     long timePeriod = 0, lastTime = 0, currentTime = 0;
     while (timePeriod < seconds) {
         if (iterator.hasNext()) {
             Position current = iterator.next();
             latitudeSum += current.getLatitude();
             longitudeSum += current.getLongitude();
-            accuracySum += current.getAccuracy();
+            if (lastAccuracy < current.getAccuracy())
+                lastAccuracy = current.getAccuracy();
             // It is milliseconds, otherwise seconds
             if (int(std::log10(current.getTime())) + 1 == 13) {
                 currentTime = current.getTime() / 1000;
@@ -59,7 +77,7 @@ Position PositionParser::average(DataStreamIterator<Position> &iterator, int sec
         }
     }
 
-    Position p (accuracySum / counter, lastTime, lastProvider);
+    Position p (lastAccuracy, lastTime, lastProvider);
     try {
         p.setLatitude(latitudeSum / counter);
         p.setLongitude(longitudeSum / counter);
