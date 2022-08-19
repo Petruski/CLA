@@ -12,14 +12,16 @@ int main(int argc, char *argv[]) {
         + appName + "[filename][latitude_1][longitude_1][latitude_2][longitude_2][latitude_3][longitude_3][latitude_4][longitude_4]\n"
         + appName + "[filename][isInsideLimit][latitude_1][longitude_1][latitude_2][longitude_2][latitude_3][longitude_3][latitude_4][longitude_4]"
         + appName + "[filename][isInsideLimit][timeFrame][latitude_1][longitude_1][latitude_2][longitude_2][latitude_3][longitude_3][latitude_4][longitude_4]\n"
-        + appName + "[filename][isInsideLimit][timeFrame][averages][latitude_1][longitude_1][latitude_2][longitude_2][latitude_3][longitude_3][latitude_4][longitude_4]\n";
+        + appName + "[filename][isInsideLimit][timeFrame][averages][latitude_1][longitude_1][latitude_2][longitude_2][latitude_3][longitude_3][latitude_4][longitude_4]\n"
+        + appName + "[filename][isInsideLimit][timeFrame][averages][map_marker_lat][map_marker_lon][latitude_1][longitude_1][latitude_2][longitude_2][latitude_3][longitude_3][latitude_4][longitude_4]\n";
 
     // check arg
     std::string fileName;
     double isInsideLimit, cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat, cornerC_lon, cornerD_lat, cornerD_lon;
+    double map_marker_lat = 0, map_marker_lon = 0;
     int timeFrame, no_averages;
 
-    if (!(argc == 9 || argc == 10 || argc == 11 || argc == 12 || argc == 13)) {
+    if (!(argc == 9 || argc == 10 || argc == 11 || argc == 12 || argc == 13 || argc == 15)) {
         std::cout << usage << std::endl;
         return -1;
     }
@@ -110,7 +112,7 @@ int main(int argc, char *argv[]) {
             std::cout << usage << std::endl;
             return 1;
         }
-    } else {
+    } else if (argc == 13) {
         fileName = argv[1];
 
         try {
@@ -130,10 +132,32 @@ int main(int argc, char *argv[]) {
             std::cout << usage << std::endl;
             return 1;
         }
+    } else {
+        fileName = argv[1];
+
+        try {
+            isInsideLimit = utils::toDouble(argv[2]);
+            timeFrame = utils::toInt(argv[3]);
+            no_averages = utils::toInt(argv[4]);
+            map_marker_lat = utils::toDouble(argv[5]);
+            map_marker_lon = utils::toDouble(argv[6]);
+            cornerA_lat = utils::toDouble(argv[7]);
+            cornerA_lon = utils::toDouble(argv[8]);
+            cornerB_lat = utils::toDouble(argv[9]);
+            cornerB_lon = utils::toDouble(argv[10]);
+            cornerC_lat = utils::toDouble(argv[11]);
+            cornerC_lon = utils::toDouble((argv[12]));
+            cornerD_lat = utils::toDouble(argv[13]);
+            cornerD_lon = utils::toDouble(argv[14]);
+        } catch (std::runtime_error &e) {
+            std::cout << "Exception: " << e.what() << std::endl;
+            std::cout << usage << std::endl;
+            return 1;
+        }
     }
     // Initialize CLA
-    CLA cla(cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat,
-            cornerC_lon, cornerD_lat, cornerD_lon, timeFrame, no_averages, 16, isInsideLimit, fileName);
+    CLA cla(map_marker_lat, map_marker_lon, cornerA_lat, cornerA_lon, cornerB_lat, cornerB_lon, cornerC_lat,
+            cornerC_lon, cornerD_lat, cornerD_lon, timeFrame, no_averages, 24, isInsideLimit, fileName);
     cla.startCLA();
 //    std::cout << "Filename is: " << fileName << std::endl;
 //    std::cout << "IsInsideLimit is: " << isInsideLimit << std::endl;

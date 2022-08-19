@@ -13,14 +13,19 @@
 
 class CLA {
 public:
-    CLA(double cornerA_lat, double cornerA_lon, double cornerB_lat, double cornerB_lon, double cornerC_lat, double cornerC_lon,
+    CLA(double a_map_marker_lat, double a_map_marker_lon, double cornerA_lat, double cornerA_lon,
+        double cornerB_lat, double cornerB_lon, double cornerC_lat, double cornerC_lon,
         double cornerD_lat, double cornerD_lon, int time, int no_averages, int margin, double isInsideLimit, std::string filename)
-    : m_cornerA_lat(cornerA_lat), m_cornerA_lon(cornerA_lon), m_cornerB_lat(cornerB_lat), m_cornerB_lon(cornerB_lon),
+    : m_map_marker_lat(a_map_marker_lat), m_map_marker_lon(a_map_marker_lon), m_cornerA_lat(cornerA_lat),
+      m_cornerA_lon(cornerA_lon), m_cornerB_lat(cornerB_lat), m_cornerB_lon(cornerB_lon),
       m_cornerC_lat(cornerC_lat), m_cornerC_lon(cornerC_lon), m_cornerD_lat(cornerD_lat), m_cornerD_lon(cornerD_lon),
       m_time(time), m_averages(no_averages), m_margin(margin), m_isInsideLimit(isInsideLimit), m_filename(std::move(filename)) {}
     void startCLA();
-    void startShortestDistance();
+    static bool startShortestDistance(const Position& position, const VenueRect& venue, const std::vector<VenueRect>& dummyVenues, int cutoff);
+    static void setupDummyVenues(std::vector<VenueRect>& dummyVenues);
 private:
+    double m_map_marker_lat;
+    double m_map_marker_lon;
     double m_cornerA_lat;
     double m_cornerA_lon;
     double m_cornerB_lat;

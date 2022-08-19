@@ -18,6 +18,7 @@ private:
     Coordinate m_cornerSW, m_cornerNW, m_cornerNE, m_cornerSE;
 
 public:
+    explicit VenueRect(Coordinate mapMarker);
     VenueRect(Coordinate cornerA, Coordinate cornerB, Coordinate cornerC, Coordinate cornerD);
 
     // get all coordinates associated with venue rectangle

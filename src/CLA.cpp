@@ -25,6 +25,11 @@ void CLA::startCLA() {
         return;
     }
     VenueRect venueRect(cornerA, cornerB, cornerC, cornerD);
+    venueRect.setMapMarker(m_map_marker_lat, m_map_marker_lon);
+
+    // Set up dummy venues
+    std::vector<VenueRect> dummyVenues;
+    setupDummyVenues(dummyVenues);
 
     // Initialize the file parser and data stream iterator
     FileParser fileParser(m_filename);
@@ -44,6 +49,8 @@ void CLA::startCLA() {
     // Set up variables for statistical analysis
     int positiveResults = 0;
     int negativeResults = 0;
+    int positiveShortestDistanceResults = 0;
+    int negativeShortestDistanceResults = 0;
     double specificity;
     double sensitivity;
 
@@ -80,6 +87,13 @@ void CLA::startCLA() {
             }
         }
         delete circle;
+
+        // Shortest distance approach tested for each position between the three venues -- VERY STATIC AND NAIVE
+        if (startShortestDistance(p, venueRect, dummyVenues, m_margin)) {
+            positiveShortestDistanceResults++;
+        } else {
+            negativeShortestDistanceResults++;
+        }
     }
 
     delete rectangle;
@@ -102,11 +116,43 @@ void CLA::startCLA() {
     double med_a_prior_CI = Statistics::multiBayesian(specificity, sensitivity, Statistics::getMedPrior(), negativeResults, positiveResults);
     double high_a_prior_CI = Statistics::multiBayesian(specificity, sensitivity, Statistics::getHighPrior(), negativeResults, positiveResults);
 
+    double low_a_prior_CI_SDA = Statistics::multiBayesian(specificity, sensitivity, Statistics::getLowPrior(), negativeShortestDistanceResults, positiveShortestDistanceResults);
+    double med_a_prior_CI_SDA = Statistics::multiBayesian(specificity, sensitivity, Statistics::getMedPrior(), negativeShortestDistanceResults, positiveShortestDistanceResults);
+    double high_a_prior_CI_SDA = Statistics::multiBayesian(specificity, sensitivity, Statistics::getHighPrior(), negativeShortestDistanceResults, positiveShortestDistanceResults);
+
 //    std::cout << "Low CI: " << low_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
 //    std::cout << "Med CI: " << med_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
 //    std::cout << "High CI: " <<  high_a_prior_CI << "\nPositive: " << positiveResults << "\nNegative: " << negativeResults << "\nSpecificity: " << specificity << "\nSensitivity: " << sensitivity << std::endl;
-    std::cout << low_a_prior_CI << ", " <<  med_a_prior_CI << ", " << high_a_prior_CI << ", " << positiveResults << ", " << negativeResults << ", " << specificity << ", " << sensitivity;
+    std::cout << low_a_prior_CI << ", " <<  med_a_prior_CI << ", " << high_a_prior_CI << ", " << low_a_prior_CI_SDA << ", "
+              << med_a_prior_CI_SDA << ", " << high_a_prior_CI_SDA << ", " << positiveResults << ", " << negativeResults << ", "
+              << positiveShortestDistanceResults << ", " << negativeShortestDistanceResults << ", " << specificity << ", " << sensitivity;
 }
 
-void CLA::startShortestDistance() {
+bool CLA::startShortestDistance(const Position& position, const VenueRect& venue, const std::vector<VenueRect>& dummyVenues, int cutoff) {
+    // Get all distances between the venue we're interested in, and many neighbouring venues.
+    // If the venue that we are interested in is the closest, then it's a positive result
+    std::vector<double> distances;
+    for (const auto& x : dummyVenues) {
+        distances.emplace_back(x.getMapMarker().getDistanceTo(position));
+    }
+    distances.emplace_back(venue.getMapMarker().getDistanceTo(position));
+    auto result = std::min_element(distances.begin(), distances.end());
+    auto index = std::distance(distances.begin(), result);
+    // Check if the distance between the Venue's map marker and the position is the shortest distance out of all possible distances
+    if (utils::equal(distances[index], venue.getMapMarker().getDistanceTo(position))) {
+        return true;
+    }
+    return false;
+}
+
+void CLA::setupDummyVenues(std::vector<VenueRect> &dummyVenues) {
+    dummyVenues.emplace_back(VenueRect(Coordinate(64.75005844153877, 20.95989377221487)));
+    dummyVenues.emplace_back(VenueRect(Coordinate(64.75024311573505, 20.960119142255596)));
+    dummyVenues.emplace_back(VenueRect(Coordinate(64.75036616140464, 20.958868001015478)));
+    dummyVenues.emplace_back(VenueRect(Coordinate(64.75041749531754, 20.959789173706202)));
+    dummyVenues.emplace_back(VenueRect(Coordinate(64.75074894625376, 20.953150311778764)));
+    dummyVenues.emplace_back(VenueRect(Coordinate(64.751025009119, 20.95328789326456)));
+    dummyVenues.emplace_back(VenueRect(Coordinate(64.75074964221162, 20.95272692014174)));
+    dummyVenues.emplace_back(VenueRect(Coordinate(64.75091006479093, 20.952868609217933)));
+    dummyVenues.emplace_back(VenueRect(Coordinate(64.73155004747157, 20.975432053841548)));
 }

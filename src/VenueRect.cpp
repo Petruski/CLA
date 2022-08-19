@@ -21,6 +21,10 @@ VenueRect::VenueRect(Coordinate cornerA, Coordinate cornerB, Coordinate cornerC,
     m_cornerSE = corners[3];
 }
 
+VenueRect::VenueRect(Coordinate mapMarker) {
+    this->m_mapMarker = mapMarker;
+}
+
 
 
 

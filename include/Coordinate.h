@@ -17,6 +17,7 @@ protected:
     double m_longitude;
 public:
     Coordinate(): m_latitude(0), m_longitude(0) {}
+    Coordinate(double a_lat, double a_lon) : m_latitude(a_lat), m_longitude(a_lon) {}
 
     // getters and setters
     [[nodiscard]] double getLatitude() const;
